@@ -5,10 +5,22 @@ title: Programming with Python
 
 The best way to learn how to program is to do something either fun or
 useful, so this introduction to Python is built a hopefully fun
-example: The omputation and visualization of the so-called Mandelbrot
+example: The computation and visualization of the so-called Mandelbrot
 Set.
 
-Our real goal isn't to teach you Python, but to teach you the basic
+The [Mandelbrot set] (https://en.wikipedia.org/wiki/Mandelbrot_set) is
+a set of complex numbers for which a certain iterative sequence does
+not diverge. Since complex numbers have a real and an imaginary part,
+they can be visualized on a plane, the so-called complex plane. It
+happens that the Mandelbrot set has a very rich and "complex"
+structure which we are going to explore.
+
+If you are curious, the sequence mentioned is "add-and-square":
+Starting with 0, you add a given complex number, square the result,
+add the same number, square again, etc.
+
+Our real goal isn't to teach you about the Mandelbrot set of
+course. It's not even to teach you Python, but to teach you the basic
 concepts that all programming depends on.  We use Python in our
 lessons because:
 
@@ -25,7 +37,8 @@ When dealing with the Mandelbrot fractal set, we will generate and
 handle data sets are stored in [comma-separated
 values](reference.html#comma-separated-values) (CSV) format: each row
 corresponds to a fixed imaginary part and each column to a real part
-of a number in the complex plane. The first few rows of our first file look something like this:
+of a number in the complex plane. The first few rows of our first file
+look something like this:
 
 ~~~
 2,3,3,3,3,3,3,3,3,4,4,4,5,7,9,1000,4,4,3,3,2
@@ -51,7 +64,9 @@ of a number in the complex plane. The first few rows of our first file look some
 2,3,3,3,3,3,3,3,3,4,4,4,5,7,9,1000,4,4,3,3,2
 ~~~
 
-We want to:
+As an aside, from the 'typographical density' of the numbers in this small file we can almost guess the basic outline of the set we are investigatign.
+
+But for now We want to:
 
 *   load that data into memory,
 *   plot the result.
@@ -60,23 +75,21 @@ To do that, we'll have to learn a little bit about programming.
 
 > ## Prerequisites {.prereq}
 >
-> Learners need to understand the concepts of files and directories
-> (including the working directory) and how to start a Python
-> interpreter before tackling this lesson. This lesson references the Jupyter (IPython)
-> Notebook although it can be taught through any Python interpreter.
-> The commands in this lesson pertain to **Python 3**.
+>Learners need to understand the concepts of files and directories
+>(including the working directory) and how to start a Python
+>interpreter before tackling this lesson.  The commands in this lesson
+>pertain to **Python 3**.
 
 > ## Getting ready {.getready}
 >
-> You need to download some files to follow this lesson:
+> All the required data can be found in your home directory on your account
 >
-> 1. Make a new folder in your Desktop called `python-novice-inflammation`.
-> 2. Download [python-novice-inflammation-data.zip](./python-novice-inflammation-data.zip) and move the file to this folder.
-> 3. If it's not unzipped yet, double-click on it to unzip it. You should end up with a new folder called `data`.
-> 4. You can access this folder from the Unix shell with:
+> 1. There is a folder (directory) python-novice-mandelbrot in your home directory.
+> 2. It contains another folder called "data". 
+> 3. You can access this folder from the Unix shell with:
 >
 > ~~~ {.input}
-> $ cd && cd Desktop/python-novice-inflammation/data
+> $ cd && cd python-novice-madelbrot/data
 > ~~~
 
 ## Topics

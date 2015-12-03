@@ -27,8 +27,10 @@
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
                     <h1 class="title">Programming with Python</h1>
-          <p>The best way to learn how to program is to do something either fun or useful, so this introduction to Python is built a hopefully fun example: The omputation and visualization of the so-called Mandelbrot Set.</p>
-<p>Our real goal isn’t to teach you Python, but to teach you the basic concepts that all programming depends on. We use Python in our lessons because:</p>
+          <p>The best way to learn how to program is to do something either fun or useful, so this introduction to Python is built a hopefully fun example: The computation and visualization of the so-called Mandelbrot Set.</p>
+<p>The [Mandelbrot set] (https://en.wikipedia.org/wiki/Mandelbrot_set) is a set of complex numbers for which a certain iterative sequence does not diverge. Since complex numbers have a real and an imaginary part, they can be visualized on a plane, the so-called complex plane. It happens that the Mandelbrot set has a very rich and “complex” structure which we are going to explore.</p>
+<p>If you are curious, the sequence mentioned is “add-and-square”: Starting with 0, you add a given complex number, square the result, add the same number, square again, etc.</p>
+<p>Our real goal isn’t to teach you about the Mandelbrot set of course. It’s not even to teach you Python, but to teach you the basic concepts that all programming depends on. We use Python in our lessons because:</p>
 <ol style="list-style-type: decimal">
 <li>we have to use <em>something</em> for examples;</li>
 <li>it’s free, well-documented, and runs almost everywhere;</li>
@@ -58,7 +60,8 @@
 3,3,3,3,3,3,4,4,4,4,5,6,8,1000,1000,18,6,5,5,4,3
 3,3,3,3,3,3,3,4,4,4,4,5,6,9,24,8,5,4,4,3,3
 2,3,3,3,3,3,3,3,3,4,4,4,5,7,9,1000,4,4,3,3,2</code></pre>
-<p>We want to:</p>
+<p>As an aside, from the ‘typographical density’ of the numbers in this small file we can almost guess the basic outline of the set we are investigatign.</p>
+<p>But for now We want to:</p>
 <ul>
 <li>load that data into memory,</li>
 <li>plot the result.</li>
@@ -69,7 +72,7 @@
 <h2 id="prerequisites"><span class="glyphicon glyphicon-education"></span>Prerequisites</h2>
 </div>
 <div class="panel-body">
-<p>Learners need to understand the concepts of files and directories (including the working directory) and how to start a Python interpreter before tackling this lesson. This lesson references the Jupyter (IPython) Notebook although it can be taught through any Python interpreter. The commands in this lesson pertain to <strong>Python 3</strong>.</p>
+<p>Learners need to understand the concepts of files and directories (including the working directory) and how to start a Python interpreter before tackling this lesson. The commands in this lesson pertain to <strong>Python 3</strong>.</p>
 </div>
 </section>
 <section class="getready panel panel-warning">
@@ -77,14 +80,13 @@
 <h2 id="getting-ready"><span class="glyphicon glyphicon-check"></span>Getting ready</h2>
 </div>
 <div class="panel-body">
-<p>You need to download some files to follow this lesson:</p>
+<p>All the required data can be found in your home directory on your account</p>
 <ol style="list-style-type: decimal">
-<li>Make a new folder in your Desktop called <code>python-novice-inflammation</code>.</li>
-<li>Download <a href="./python-novice-inflammation-data.zip">python-novice-inflammation-data.zip</a> and move the file to this folder.</li>
-<li>If it’s not unzipped yet, double-click on it to unzip it. You should end up with a new folder called <code>data</code>.</li>
+<li>There is a folder (directory) python-novice-mandelbrot in your home directory.</li>
+<li>It contains another folder called “data”.</li>
 <li>You can access this folder from the Unix shell with:</li>
 </ol>
-<pre class="input"><code>$ cd &amp;&amp; cd Desktop/python-novice-inflammation/data</code></pre>
+<pre class="input"><code>$ cd &amp;&amp; cd python-novice-madelbrot/data</code></pre>
 </div>
 </section>
 <h2 id="topics">Topics</h2>
