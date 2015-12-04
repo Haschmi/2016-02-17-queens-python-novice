@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Programming with Python
-subtitle: Analyzing Patient Data
+subtitle: Data Files and Visualization
 minutes: 30
 ---
 > ## Learning Objectives {.objectives}
@@ -25,7 +25,7 @@ How do I build this from scratch ?
 
 but rather
 
-Is the a package that does that ?
+Is there a package that does that ?
 
 For instance, there's a bunch of data files in our directory, and
 we're going to have a look at the data they contain, and learn some

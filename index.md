@@ -89,12 +89,12 @@ To do that, we'll have to learn a little bit about programming.
 > 3. You can access this folder from the Unix shell with:
 >
 > ~~~ {.input}
-> $ cd && cd python-novice-madelbrot/data
+> $ cd && cd python-novice-mandelbrot/data
 > ~~~
 
 ## Topics
 
-1.  [Analyzing Patient Data](01-numpy.html)
+1.  [Data Files and Data Visualization](01-numpy.html)
 2.  [Repeating Actions with Loops](02-loop.html)
 3.  [Storing Multiple Values in Lists](03-lists.html)
 4.  [Analyzing Data from Multiple Files](04-files.html)
@@ -103,7 +103,7 @@ To do that, we'll have to learn a little bit about programming.
 7.  [Errors and Exceptions](07-errors.html)
 8.  [Defensive Programming](08-defensive.html)
 9.  [Debugging](09-debugging.html)
-10.  [Command-Line Programs](10-cmdline.html)
+10. [Command-Line Programs](10-cmdline.html)
 
 
 ## Other Resources

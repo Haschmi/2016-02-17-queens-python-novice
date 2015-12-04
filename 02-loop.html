@@ -41,23 +41,19 @@
 </ul>
 </div>
 </section>
-<p>In the last lesson, we wrote some code that plots some values of interest from our first inflammation dataset, and reveals some suspicious features in it, such as from <code>inflammation-01.csv</code></p>
-<p><img src="fig/03-loop_2_0.png" alt="Analysis of inflammation-01.csv" /><br /> We have a dozen data sets right now, though, and more on the way. We want to create plots for all of our data sets with a single statement. To do that, we’ll have to teach the computer how to repeat things.</p>
-<p>An example task that we might want to repeat is printing each character in a word on a line of its own. One way to do this would be to use a series of <code>print</code> statements:</p>
-<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;lead&#39;</span>
+<p>In the last lesson, we wrote some code that plots values from a pre-calculated dataset of Mandelbrot iteration numbers.We fond that a small dataset does not really properly show the finer features of the set, so maybe we should write a program that lets us decide which region we would like to look at, and at what resolution.</p>
+<p>Since for each of that data-points, we’ll have to do up to 1000 iteration, we better find out how to get the computer how to “repeat stuff”. This is done with a loop.</p>
+<p>Here’s an example: If we want to print out the letters in a word one-by-one, it would look something like this:</p>
+<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;word&#39;</span>
 <span class="dt">print</span>(word[<span class="dv">0</span>])
 <span class="dt">print</span>(word[<span class="dv">1</span>])
 <span class="dt">print</span>(word[<span class="dv">2</span>])
 <span class="dt">print</span>(word[<span class="dv">3</span>])</code></pre>
-<pre class="output"><code>l
-e
-a
+<pre class="output"><code>w
+o
+r
 d</code></pre>
-<p>This is a bad approach for two reasons:</p>
-<ol style="list-style-type: decimal">
-<li><p>It doesn’t scale: if we want to print the characters in a string that’s hundreds of letters long, we’d be better off just typing them in.</p></li>
-<li><p>It’s fragile: if we give it a longer string, it only prints part of the data, and if we give it a shorter one, it produces an error because we’re asking for characters that don’t exist.</p></li>
-</ol>
+<p>That’s not exactly elegant: We’re spending a lot of effort for little gain, and in case of a string with hundreds of letter, we’re typing ourselves to death. On top of it, this approach is error-prone:</p>
 <pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;tin&#39;</span>
 <span class="dt">print</span>(word[<span class="dv">0</span>])
 <span class="dt">print</span>(word[<span class="dv">1</span>])
@@ -66,72 +62,90 @@ d</code></pre>
 <pre class="output"><code>t
 i
 n</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-IndexError                                Traceback (most recent call last)
-&lt;ipython-input-3-7974b6cdaf14&gt; in &lt;module&gt;()
-      3 print(word[1])
-      4 print(word[2])
-----&gt; 5 print(word[3])
-
+<pre class="error"><code>&gt;&gt;&gt; print(word[3])
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
 IndexError: string index out of range</code></pre>
-<p>Here’s a better approach:</p>
-<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;lead&#39;</span>
+<p>because the element word[3] does not exist in ‘tin’. Here’s a much better approach:</p>
+<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;tin&#39;</span>
 <span class="kw">for</span> char in word:
     <span class="dt">print</span>(char)</code></pre>
-<pre class="output"><code>l
-e
-a
-d</code></pre>
-<p>This is shorter—certainly shorter than something that prints every character in a hundred-letter string—and more robust as well:</p>
-<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;oxygen&#39;</span>
-<span class="kw">for</span> char in word:
-    <span class="dt">print</span>(char)</code></pre>
-<pre class="output"><code>o
-x
-y
-g
-e
+<pre class="output"><code>t
+i
 n</code></pre>
+<p>This is not only shorter, its also more robust because it works with any string size:</p>
+<pre class="sourceCode python"><code class="sourceCode python">word = <span class="st">&#39;This is the winter of our discontent&#39;</span>
+<span class="kw">for</span> char in word:
+    <span class="dt">print</span>(char)</code></pre>
+<pre class="output"><code>T
+h
+i
+s
+
+i
+s
+
+t
+h
+e
+
+w
+i
+n
+t
+e
+r
+
+o
+f
+
+o
+u
+r
+
+d
+i
+s
+c
+o
+n
+t
+e
+n
+t</code></pre>
 <p>The improved version of <code>print_characters</code> uses a <a href="reference.html#for-loop">for loop</a> to repeat an operation—in this case, printing—once for each thing in a collection. The general form of a loop is:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="kw">for</span> variable in collection:
     do things <span class="kw">with</span> variable</code></pre>
 <p>We can call the <a href="reference.html#loop-variable">loop variable</a> anything we like, but there must be a colon at the end of the line starting the loop, and we must indent anything we want to run inside the loop. Unlike many other languages, there is no command to end a loop (e.g. end for); what is indented after the for statement belongs to the loop.</p>
 <p>Here’s another loop that repeatedly updates a variable:</p>
-<pre class="sourceCode python"><code class="sourceCode python">length = <span class="dv">0</span>
-<span class="kw">for</span> vowel in <span class="st">&#39;aeiou&#39;</span>:
-    length = length + <span class="dv">1</span>
-<span class="dt">print</span>(<span class="st">&#39;There are&#39;</span>, length, <span class="st">&#39;vowels&#39;</span>)</code></pre>
-<pre class="output"><code>There are 5 vowels</code></pre>
-<p>It’s worth tracing the execution of this little program step by step. Since there are five characters in <code>'aeiou'</code>, the statement on line 3 will be executed five times. The first time around, <code>length</code> is zero (the value assigned to it on line 1) and <code>vowel</code> is <code>'a'</code>. The statement adds 1 to the old value of <code>length</code>, producing 1, and updates <code>length</code> to refer to that new value. The next time around, <code>vowel</code> is <code>'e'</code> and <code>length</code> is 1, so <code>length</code> is updated to be 2. After three more updates, <code>length</code> is 5; since there is nothing left in <code>'aeiou'</code> for Python to process, the loop finishes and the <code>print</code> statement on line 4 tells us our final answer.</p>
+<pre class="sourceCode python"><code class="sourceCode python">length=<span class="dv">0</span>
+<span class="kw">for</span> letter in <span class="st">&#39;Mandelbrot&#39;</span>:
+    length=length<span class="dv">+1</span>
+<span class="dt">print</span> (<span class="st">&quot;There are &quot;</span>,length,<span class="st">&quot; letters in </span><span class="ch">\&#39;</span><span class="st">Mandelbrot</span><span class="ch">\&#39;</span><span class="st">&quot;</span>)</code></pre>
+<pre class="output"><code>There are  10  letters in &#39;Mandelbrot&#39;</code></pre>
+<p>It’s worth tracing the execution of this little program step by step. For each of the characters in the string ‘Mandelbrot’ the statement on line 3 is executed once. Beginning with length zero (the value assigned to it on line 1) the variable letter is ‘M’. The statement adds 1 to the old value of length, producing 1, and updates length to refer to that new value. The next time around, vowel is ‘a’ and length is 1, so length is updated to be 2, etc. After eight more updates, length is 10 and letter is t; since there is nothing left in ‘Mandelbrot’ for Python to process, the loop finishes and the print statement on line 4 tells us our final answer.</p>
 <p>Note that a loop variable is just a variable that’s being used to record progress in a loop. It still exists after the loop is over, and we can re-use variables previously defined as loop variables as well:</p>
-<pre class="sourceCode python"><code class="sourceCode python">letter = <span class="st">&#39;z&#39;</span>
-<span class="kw">for</span> letter in <span class="st">&#39;abc&#39;</span>:
-    <span class="dt">print</span>(letter)
-<span class="dt">print</span>(<span class="st">&#39;after the loop, letter is&#39;</span>, letter)</code></pre>
-<pre class="output"><code>a
-b
-c
-after the loop, letter is c</code></pre>
-<p>Note also that finding the length of a string is such a common operation that Python actually has a built-in function to do it called <code>len</code>:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="dt">len</span>(<span class="st">&#39;aeiou&#39;</span>))</code></pre>
-<pre class="output"><code>5</code></pre>
-<p><code>len</code> is much faster than any function we could write ourselves, and much easier to read than a two-line loop; it will also give us the length of many other things that we haven’t met yet, so we should always use it when we can.</p>
+<pre class="sourceCode python"><code class="sourceCode python">letter = <span class="st">&#39;A&#39;</span>
+<span class="kw">for</span> letter in <span class="st">&#39;Mandelbrot&#39;</span>:
+    length=length<span class="dv">+1</span>
+<span class="dt">print</span>(<span class="st">&#39;After the loop, letter is&#39;</span>, letter)</code></pre>
+<pre class="output"><code>After the loop, letter is t</code></pre>
+<p>Note that Python also has a built-in function to determine the length of a string:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="dt">len</span>(<span class="st">&#39;Mandelbrot&#39;</span>))</code></pre>
+<pre class="output"><code>10</code></pre>
+<p>which does the same job with a one-liner. len is much faster than any function we could write ourselves, and much easier to read than a two-line loop; it will also give us the length of many other things that we haven’t met yet, so we should always use it when we can.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h2 id="from-1-to-n"><span class="glyphicon glyphicon-pencil"></span>From 1 to N</h2>
 </div>
 <div class="panel-body">
-<p>Python has a built-in function called <code>range</code> that creates a sequence of numbers. Range can accept 1-3 parameters. If one parameter is input, range creates an array of that length, starting at zero and incrementing by 1. If 2 parameters are input, range starts at the first and ends at the second, incrementing by one. If range is passed 3 parameters, it stars at the first one, ends at the second one, and increments by the third one. For example, <code>range(3)</code> produces the numbers 0, 1, 2, while <code>range(2, 5)</code> produces 2, 3, 4, and <code>range(3, 10, 3)</code> produces 3, 6, 9. Using <code>range</code>, write a loop that uses <code>range</code> to print the first 3 natural numbers:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dv">1</span>
-<span class="dv">2</span>
-<span class="dv">3</span></code></pre>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="computing-powers-with-loops"><span class="glyphicon glyphicon-pencil"></span>Computing powers with loops</h2>
-</div>
-<div class="panel-body">
+<p>Python has a built-in function called range that creates a sequence of numbers. Range can accept 1-3 parameters. If one parameter is input, range creates an array of that length, starting at zero and incrementing by 1. If 2 parameters are input, range starts at the first and ends at the second, incrementing by one. If range is passed 3 parameters, it stars at the first one, ends at the second one, and increments by the third one. For instance,</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">for</span> i in <span class="dt">range</span>(<span class="dv">4</span>,<span class="dv">10</span>,<span class="dv">2</span>):
+    <span class="dt">print</span>(i)</code></pre>
+<pre class="output"><code>4
+6
+8</code></pre>
+<h2 id="computing-powers-with-loops" class="challenge">Computing powers with loops</h2>
 <p>Exponentiation is built into Python:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="dv">5</span>**<span class="dv">3</span>)
 <span class="dv">125</span></code></pre>

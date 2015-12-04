@@ -11,21 +11,21 @@ minutes: 30
 > *   Trace changes to a loop variable as the loop runs.
 > *   Trace changes to other variables as they are updated by a for loop.
 
-In the last lesson,
-we wrote some code that plots some values of interest from our first inflammation dataset,
-and reveals some suspicious features in it, such as from `inflammation-01.csv`
+In the last lesson, we wrote some code that plots values from a
+pre-calculated dataset of Mandelbrot iteration numbers.We fond that a
+small dataset does not really properly show the finer features of the
+set, so maybe we should write a program that lets us decide which
+region we would like to look at, and at what resolution.
 
-![Analysis of inflammation-01.csv](fig/03-loop_2_0.png)\
+Since for each of that data-points, we'll have to do up to 1000
+iteration, we better find out how to get the computer how to "repeat
+stuff". This is done with a loop.
 
-We have a dozen data sets right now, though, and more on the way.
-We want to create plots for all of our data sets with a single statement.
-To do that, we'll have to teach the computer how to repeat things.
-
-An example task that we might want to repeat is printing each character in a
-word on a line of its own. One way to do this would be to use a series of `print` statements:
+Here's an example: If we want to print out the letters in a word
+one-by-one, it would look something like this:
 
 ~~~ {.python}
-word = 'lead'
+word = 'word'
 print(word[0])
 print(word[1])
 print(word[2])
@@ -33,23 +33,15 @@ print(word[3])
 
 ~~~
 ~~~ {.output}
-l
-e
-a
+w
+o
+r
 d
 ~~~
 
-This is a bad approach for two reasons:
-
-1.  It doesn't scale:
-    if we want to print the characters in a string that's hundreds of letters long,
-    we'd be better off just typing them in.
-
-1.  It's fragile:
-    if we give it a longer string,
-    it only prints part of the data,
-    and if we give it a shorter one,
-    it produces an error because we're asking for characters that don't exist.
+That's not exactly elegant: We're spending a lot of effort for little
+gain, and in case of a string with hundreds of letter, we're typing
+ourselves to death. On top of it, this approach is error-prone:
 
 ~~~ {.python}
 word = 'tin'
@@ -65,150 +57,168 @@ i
 n
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-IndexError                                Traceback (most recent call last)
-<ipython-input-3-7974b6cdaf14> in <module>()
-      3 print(word[1])
-      4 print(word[2])
-----> 5 print(word[3])
-
+>>> print(word[3])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 IndexError: string index out of range
 ~~~
 
-
-Here's a better approach:
+because the element word[3] does not exist in 'tin'. 
+Here's a much better approach:
 
 ~~~ {.python}
-word = 'lead'
+word = 'tin'
 for char in word:
     print(char)
 
 ~~~
 
 ~~~ {.output}
-l
-e
-a
-d
-~~~
-
-This is shorter---certainly shorter than something that prints every character in a hundred-letter string---and
-more robust as well:
-
-~~~ {.python}
-word = 'oxygen'
-for char in word:
-    print(char)
-~~~
-
-~~~ {.output}
-o
-x
-y
-g
-e
+t
+i
 n
 ~~~
 
-The improved version of `print_characters` uses a [for loop](reference.html#for-loop)
-to repeat an operation---in this case, printing---once for each thing in a collection.
-The general form of a loop is:
+This is not only shorter, its also more robust because it works with any string size:
+
+~~~ {.python}
+word = 'This is the winter of our discontent'
+for char in word:
+    print(char)
+~~~
+
+~~~ {.output}
+T
+h
+i
+s
+
+i
+s
+
+t
+h
+e
+
+w
+i
+n
+t
+e
+r
+
+o
+f
+
+o
+u
+r
+
+d
+i
+s
+c
+o
+n
+t
+e
+n
+t
+~~~
+
+The improved version of `print_characters` uses a [for
+loop](reference.html#for-loop) to repeat an operation---in this case,
+printing---once for each thing in a collection.  The general form of a
+loop is:
 
 ~~~ {.python}
 for variable in collection:
     do things with variable
 ~~~
 
-We can call the [loop variable](reference.html#loop-variable) anything we like,
-but there must be a colon at the end of the line starting the loop,
-and we must indent anything we want to run inside the loop. Unlike many other languages, there is no
-command to end a loop (e.g. end for); what is indented after the for statement belongs to the loop.
+We can call the [loop variable](reference.html#loop-variable) anything
+we like, but there must be a colon at the end of the line starting the
+loop, and we must indent anything we want to run inside the
+loop. Unlike many other languages, there is no command to end a loop
+(e.g. end for); what is indented after the for statement belongs to
+the loop.
 
 Here's another loop that repeatedly updates a variable:
 
 ~~~ {.python}
-length = 0
-for vowel in 'aeiou':
-    length = length + 1
-print('There are', length, 'vowels')
+length=0
+for letter in 'Mandelbrot':
+    length=length+1
+print ("There are ",length," letters in \'Mandelbrot\'")
 ~~~
 
 ~~~ {.output}
-There are 5 vowels
+There are  10  letters in 'Mandelbrot'
 ~~~
 
-It's worth tracing the execution of this little program step by step.
-Since there are five characters in `'aeiou'`,
-the statement on line 3 will be executed five times.
-The first time around,
-`length` is zero (the value assigned to it on line 1)
-and `vowel` is `'a'`.
-The statement adds 1 to the old value of `length`,
-producing 1,
-and updates `length` to refer to that new value.
-The next time around,
-`vowel` is `'e'` and `length` is 1,
-so `length` is updated to be 2.
-After three more updates,
-`length` is 5;
-since there is nothing left in `'aeiou'` for Python to process,
-the loop finishes
-and the `print` statement on line 4 tells us our final answer.
+It’s worth tracing the execution of this little program step by
+step. For each of the characters in the string 'Mandelbrot' the
+statement on line 3 is executed once. Beginning with length zero (the
+value assigned to it on line 1) the variable letter is 'M'. The
+statement adds 1 to the old value of length, producing 1, and updates
+length to refer to that new value. The next time around, vowel is 'a'
+and length is 1, so length is updated to be 2, etc. After eight more
+updates, length is 10 and letter is t; since there is nothing left in
+'Mandelbrot' for Python to process, the loop finishes and the print
+statement on line 4 tells us our final answer.
 
-Note that a loop variable is just a variable that's being used to record progress in a loop.
-It still exists after the loop is over,
-and we can re-use variables previously defined as loop variables as well:
+Note that a loop variable is just a variable that's being used to
+record progress in a loop.  It still exists after the loop is over,
+and we can re-use variables previously defined as loop variables as
+well:
 
 ~~~ {.python}
-letter = 'z'
-for letter in 'abc':
-    print(letter)
-print('after the loop, letter is', letter)
+letter = 'A'
+for letter in 'Mandelbrot':
+    length=length+1
+print('After the loop, letter is', letter)
 ~~~
 
 ~~~ {.output}
-a
-b
-c
-after the loop, letter is c
+After the loop, letter is t
 ~~~
 
-Note also that finding the length of a string is such a common operation
-that Python actually has a built-in function to do it called `len`:
+Note that Python also has a built-in function to determine the length
+of a string:
 
 ~~~ {.python}
-print(len('aeiou'))
+print(len('Mandelbrot'))
 ~~~
 
 ~~~ {.output}
-5
+10
 ~~~
 
-`len` is much faster than any function we could write ourselves,
-and much easier to read than a two-line loop;
-it will also give us the length of many other things that we haven't met yet,
-so we should always use it when we can.
-
+which does the same job with a one-liner. len is much faster than any
+function we could write ourselves, and much easier to read than a
+two-line loop; it will also give us the length of many other things
+that we haven’t met yet, so we should always use it when we can.
 
 > ## From 1 to N {.challenge}
 >
-> Python has a built-in function called `range` that creates a sequence of numbers. Range can
-> accept 1-3 parameters. If one parameter is input, range creates an array of that length,
-> starting at zero and incrementing by 1. If 2 parameters are input, range starts at
-> the first and ends at the second, incrementing by one. If range is passed 3 parameters,
-> it stars at the first one, ends at the second one, and increments by the third one. For
-> example,
-> `range(3)` produces the numbers 0, 1, 2, while `range(2, 5)` produces 2, 3, 4,
-> and `range(3, 10, 3)` produces 3, 6, 9.
-> Using `range`,
-> write a loop that uses `range` to print the first 3 natural numbers:
+> Python has a built-in function called range that creates a sequence
+> of numbers. Range can accept 1-3 parameters. If one parameter is
+> input, range creates an array of that length, starting at zero and
+> incrementing by 1. If 2 parameters are input, range starts at the
+> first and ends at the second, incrementing by one. If range is
+> passed 3 parameters, it stars at the first one, ends at the second
+> one, and increments by the third one. For instance,
 >
 > ~~~ {.python}
-> 1
-> 2
-> 3
+> for i in range(4,10,2):
+>     print(i)
 > ~~~
-
+>
+> ~~~ {.output}
+> 4
+> 6
+> 8
+> ~~~
 > ## Computing powers with loops {.challenge}
 >
 > Exponentiation is built into Python:
