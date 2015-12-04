@@ -490,9 +490,10 @@ plot. Therefore it is exactly the fine structure of that region which
 is only visible at much higher resolutions is what we are going to
 explore.
 
-> ## Most people dislike typing {.callout} We used the syntax `import
->numpy` to import NumPy.  However, in order to save typing, it is
->[often suggested](http://www.scipy.org/getting-started.html#an-example-script)
+> ## Most people dislike typing {.callout}
+>
+>We used the syntax `import numpy` to import NumPy.  However, in order
+>to save typing, it is [often suggested](http://www.scipy.org/getting-started.html#an-example-script)
 >to make a shortcut like so: `import numpy as np`.  If you ever see
 >Python code online using a NumPy function with `np` (for example,
 >`np.loadtxt(...)`), it's because they've used this shortcut.
