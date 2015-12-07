@@ -9,88 +9,65 @@ minutes: 20
 > *   Use a library function to get a list of filenames that match a simple wildcard pattern.
 > *   Use a for loop to process multiple files.
 
-We now have almost everything we need to process all our data files.
-The only thing that's missing is a library with a rather unpleasant name:
+We can use our skills with loops to process multiple files in a
+directory, for instance by visualizing them.  The only thing that's
+missing for that is a library with a rather unfortunate name:
 
 ~~~ {.python}
 import glob
 ~~~
 
 The `glob` library contains a single function, also called `glob`,
-that finds files whose names match a pattern.
-We provide those patterns as strings:
-the character `*` matches zero or more characters,
-while `?` matches any one character.
-We can use this to get the names of all the HTML files in the current directory:
+that finds files whose names match a pattern.  We provide those
+patterns as strings: the character `*` matches zero or more
+characters, while `?` matches any one character.  We can use this to
+get the names of all the csv files that start with "mandel-big-" in the current directory:
 
 ~~~ {.python}
-print(glob.glob('*.html'))
+print(glob.glob('mandel-big-?.html'))
 ~~~
 
 ~~~ {.output}
-['01-numpy.html', '02-loop.html', '03-lists.html', '04-files.html', '05-cond.html', '06-func.html', '07-errors.html', '08-defensive.html', '09-debugging.html', '10-cmdline.html', 'index.html', 'LICENSE.html', 'instructors.html', 'README.html', 'discussion.html', 'reference.html']
+['mandel-big-2.csv', 'mandel-big-5.csv', 'mandel-big-4.csv', 'mandel-big-3.csv', 'mandel-big-0.csv', 'mandel-big-1.csv']
 ~~~
 
-As these examples show,
-`glob.glob`'s result is a list of strings,
-which means we can loop over it
-to do something with each filename in turn.
-In our case,
-the "something" we want to do is generate a set of plots for each file in our inflammation dataset.
-Let's test it by analyzing the first three files in the list:
+As these examples show, `glob.glob`'s result is a list of strings,
+which means we can loop over it to do something with each filename in
+turn.  In our case, the "something" we want to do generate a 
+plot for each of our Mandelbrot datasets.  Let's test it by
+analyzing the first three files in the list:
 
 ~~~ {.python}
-import numpy
-import matplotlib.pyplot
+import numpy as np
+import matplotlib.pyplot as plt
+import glob
 
-filenames = glob.glob('inflammation*.csv')
-filenames = filenames[0:3]
+filenames = glob.glob('mandel-big-?.csv')
 for f in filenames:
     print(f)
-
-    data = numpy.loadtxt(fname=f, delimiter=',')
-
-    fig = matplotlib.pyplot.figure(figsize=(10.0, 3.0))
-
-    axes1 = fig.add_subplot(1, 3, 1)
-    axes2 = fig.add_subplot(1, 3, 2)
-    axes3 = fig.add_subplot(1, 3, 3)
-
-    axes1.set_ylabel('average')
-    axes1.plot(data.mean(axis=0))
-
-    axes2.set_ylabel('max')
-    axes2.plot(data.max(axis=0))
-
-    axes3.set_ylabel('min')
-    axes3.plot(data.min(axis=0))
-
-    fig.tight_layout()
-    matplotlib.pyplot.show(fig)
+    data = np.loadtxt(fname=f, delimiter=',')
+    image=plt.imshow(data)
+    plt.show(image)
 ~~~
 
 ~~~ {.output}
-inflammation-01.csv
+mandel-big-2.csv
+mandel-big-5.csv
+mandel-big-4.csv
+mandel-big-3.csv
+mandel-big-0.csv
+mandel-big-1.csv
 ~~~
 
-![Analysis of inflammation-01.csv](fig/03-loop_49_1.png)\
+Sure enough, this is a nice way to create a "slide-show" of the data files. The only thing that is not quite right here is the order in which the files get put into the "filenames" list. But there is a fix for that: when you read it in, use the function sorted() to do the job:
 
-
-~~~ {.output}
-inflammation-02.csv
+~~~ (.python)
+filenames = sorted(glob.glob('mandel-big-?.csv')
+print(filenames)
 ~~~
 
-![Analysis of inflammation-02.csv](fig/03-loop_49_3.png)\
-
-
-~~~ {.output}
-inflammation-03.csv
+~~~ (.output)
+['mandel-big-0.csv', 'mandel-big-1.csv', 'mandel-big-2.csv', 'mandel-big-3.csv', 'mandel-big-4.csv', 'mandel-big-5.csv']
 ~~~
 
-![Analysis of inflammation-03.csv](fig/03-loop_49_5.png)\
-
-Sure enough,
-the maxima of the first two data sets show exactly the same ramp as the first,
-and their minima show the same staircase structure;
-a different situation has been revealed in the third dataset,
-where the maxima are a bit less regular, but the minima are consistently zero.
+Using the sorted filenames in the loop should produce the pictures in a sensible order.

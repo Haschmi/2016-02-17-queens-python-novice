@@ -47,15 +47,18 @@ we can ask the library to read our data file for us:
 numpy.loadtxt(fname='mandel-small.csv', delimiter=',')
 ~~~
 ~~~ {.output}
-[[    2.     3.     3.     3.     3.     3.     3.     3.     3.     4.
-      4.     4.     5.     7.     9.  1000.     4.     4.     3.     3.
-      2.]
- [    3.     3.     3.     3.     3.     3.     3.     4.     4.     4.
-      4.     5.     6.     9.    24.     8.     5.     4.     4.     3.
-      3.]
- [    3.     3.     3.     3.     3.     3.     4.     4.     4.     4.
-      5.     6.     8.  1000.  1000.    18.     6.     5.     5.     4.
-      3.]
+array([[    2.,     3.,     3.,     3.,     3.,     3.,     3.,     3.,
+            3.,     4.,     4.,     4.,     5.,     7.,     9.,  1000.,
+            4.,     4.,     3.,     3.],
+       [    3.,     3.,     3.,     3.,     3.,     3.,     3.,     4.,
+            4.,     4.,     4.,     5.,     6.,     9.,    24.,     8.,
+            5.,     4.,     4.,     3.],
+       [    3.,     3.,     3.,     3.,     3.,     3.,     4.,     4.,
+            4.,     4.,     5.,     6.,     8.,  1000.,  1000.,    18.,
+            6.,     5.,     5.,     4.],
+       [    3.,     3.,     3.,     3.,     3.,     4.,     4.,     4.,
+            5.,     7.,     8.,     8.,    10.,  1000.,  1000.,    13.,
+            9.,     6.,     6.,     5.],
 (...and so on...)
 ~~~
 
@@ -162,15 +165,18 @@ we can print the variable's value:
 print(data)
 ~~~
 ~~~ {.output}
-[[    2.     3.     3.     3.     3.     3.     3.     3.     3.     4.
-      4.     4.     5.     7.     9.  1000.     4.     4.     3.     3.
-      2.]
- [    3.     3.     3.     3.     3.     3.     3.     4.     4.     4.
-      4.     5.     6.     9.    24.     8.     5.     4.     4.     3.
-      3.]
- [    3.     3.     3.     3.     3.     3.     4.     4.     4.     4.
-      5.     6.     8.  1000.  1000.    18.     6.     5.     5.     4.
-      3.]
+array([[    2.,     3.,     3.,     3.,     3.,     3.,     3.,     3.,
+            3.,     4.,     4.,     4.,     5.,     7.,     9.,  1000.,
+            4.,     4.,     3.,     3.],
+       [    3.,     3.,     3.,     3.,     3.,     3.,     3.,     4.,
+            4.,     4.,     4.,     5.,     6.,     9.,    24.,     8.,
+            5.,     4.,     4.,     3.],
+       [    3.,     3.,     3.,     3.,     3.,     3.,     4.,     4.,
+            4.,     4.,     5.,     6.,     8.,  1000.,  1000.,    18.,
+            6.,     5.,     5.,     4.],
+       [    3.,     3.,     3.,     3.,     3.,     4.,     4.,     4.,
+            5.,     7.,     8.,     8.,    10.,  1000.,  1000.,    13.,
+            9.,     6.,     6.,     5.],
 (...and so on...)
 ~~~
 
@@ -195,7 +201,7 @@ what its [shape](reference.html#shape) is like this:
 print(data.shape)
 ~~~
 ~~~ {.output}
-(21, 21)
+(20, 20)
 ~~~
 
 This tells us that `data` has 60 rows and 40 columns. When we created
@@ -226,7 +232,7 @@ print('middle value in data:', data[10, 10])
 middle value in data: 1000.0
 ~~~
 
-The expression `data[30, 20]` may not surprise you, but `data[0, 0]`
+The expression `data[10, 10]` may not surprise you, but `data[0, 0]`
 might.  Programming languages like Fortran and MATLAB start counting
 at 1, because that's what human beings have done for thousands of
 years.  Languages in the C family (including C++, Java, Perl, and
@@ -246,7 +252,7 @@ want.
 > coordinates.  The indices are (row, column) instead of (column, row)
 > for the same reason, which can be confusing when plotting data.
 
-An index like `[30, 20]` selects a single element of an array, but we
+An index like `[10, 10]` selects a single element of an array, but we
 can select whole sections as well.  For example, we can select the
 first ten days (columns) of values for the first four patients (rows)
 like this:
@@ -291,9 +297,9 @@ small = data[:3, 16:]
 print(small)
 ~~~
 ~~~ {.output}
-[[ 4.  4.  3.  3.  2.]
- [ 5.  4.  4.  3.  3.]
- [ 6.  5.  5.  4.  3.]]
+[[ 4.  4.  3.  3.]
+ [ 5.  4.  4.  3.]
+ [ 6.  5.  5.  4.]]
 ~~~
 
 Arrays also know how to perform common mathematical operations on
@@ -307,23 +313,23 @@ doubledata = data * 2.0
 ~~~
 
 will create a new array `doubledata` whose elements have the value of
-two times the value of the corresponding elements in `data`:
+two times the value of the corresponding elements in `small`:
 
 ~~~ {.python}
 print("original:\n",data[:3, 16:],"\ndouble data:\n",doubledata[:3,16:])
 ~~~
 ~~~ {.output}
 original:
- [[ 4.  4.  3.  3.  2.]
- [ 5.  4.  4.  3.  3.]
- [ 6.  5.  5.  4.  3.]]
+ [[ 4.  4.  3.  3.]
+ [ 5.  4.  4.  3.]
+ [ 6.  5.  5.  4.]] 
 double data:
- [[  8.   8.   6.   6.   4.]
- [ 10.   8.   8.   6.   6.]
- [ 12.  10.  10.   8.   6.]]
+ [[  8.   8.   6.   6.]
+ [ 10.   8.   8.   6.]
+ [ 12.  10.  10.   8.]]
 ~~~
 
-Note how we can pile the whole output into a single print
+Note how we can create the whole output from a single print
 command. That includes the line breaks which are denoted by the string
 "\n".
 
@@ -340,13 +346,13 @@ will give you an array where `tripledata[0,0]` will equal `doubledata[0,0]` plus
 and so on for all other elements of the arrays.
 
 ~~~ {.python}
-print('tripledata:\n',tripledata[:3, 36:])
+print('tripledata:\n',tripledata[:3, 16:])
 ~~~
 ~~~ {.output}
 tripledata:
-[[ 6.  9.  0.  0.]
- [ 3.  3.  0.  3.]
- [ 6.  6.  3.  3.]]
+ [[ 12.  12.   9.   9.]
+ [ 15.  12.  12.   9.]
+ [ 18.  15.  15.  12.]]
 ~~~
 
 For giggles, we used single quotes here and double quotes
@@ -360,7 +366,7 @@ for its mean value
 print(data.mean())
 ~~~
 ~~~ {.output}
-362.53968254
+396.795
 ~~~
 
 `mean` is a [method](reference.html#method) of the array, i.e., a
@@ -380,8 +386,9 @@ print('maximum:', data.max()); print('minimum:', data.min()); print('std dev:', 
 ~~~ {.output}
 maximum: 1000.0
 minimum: 2.0
-std dev: 476.328259961
+std dev: 484.87493024
 ~~~
+
 Note how we put several print commands in a single line, separated by ";". Seems to do the job. 
 
 When analyzing data, though, we often want to look at partial
@@ -394,7 +401,7 @@ top_row = data[0, :] # 0 on the first axis, everything on the second
 print('Maximum in top row:', top_row.max())
 ~~~
 ~~~ {.output}
-Maximum in top row: 18.0
+Maximum in top row: 1000.0
 ~~~
 
 Note how everything after "#" is ignored by python. "#" is used to
@@ -408,7 +415,7 @@ Instead, we can combine the selection and the method call:
 print('Maximum value in bottom row', data[-1,:].max())
 ~~~
 ~~~ {.output}
-Maximum value in bottom row 1000.0
+Maximum value in bottom row 24.0
 ~~~
 
 Note the weird "-1" index ? The convention is that negative indices
@@ -430,11 +437,9 @@ want to work on.  If we ask for the average across axis 0 (rows in our
 print(data.mean(axis=0))
 ~~~
 ~~~ {.output}
-[  51.23809524   52.           52.85714286  148.66666667  241.9047619
-  244.19047619  242.0952381   148.28571429  244.28571429  432.66666667
-  621.04761905  528.47619048  621.80952381  811.04761905  812.66666667
-  718.          621.33333333  526.76190476  479.9047619     9.85714286
-    4.23809524]
+[  53.7    54.45   55.35  155.95  253.85  256.25  254.05  155.55  256.35
+  454.1   651.9   554.7   652.65  851.25  852.85  703.9   652.2   552.9
+  503.75   10.2 ]
 ~~~
 
 As a quick check, we can ask this array what its shape is:
@@ -443,10 +448,10 @@ As a quick check, we can ask this array what its shape is:
 print(data.mean(axis=0).shape)
 ~~~
 ~~~ {.output}
-(21,)
+(20,)
 ~~~
 
-The expression `(21,)` tells us we have an N&times;1 vector,
+The expression `(20,)` tells us we have an N&times;1 vector,
 so this is the average inflammation per day for all patients.
 If we average across axis 1 (columns in our 2D example), we get:
 
@@ -454,11 +459,9 @@ If we average across axis 1 (columns in our 2D example), we get:
 print(data.mean(axis=1))
 ~~~
 ~~~ {.output}
-[  51.19047619    5.14285714   99.71428571  100.38095238  291.42857143
-  431.80952381  479.80952381  483.0952381   670.85714286  764.0952381
-  858.28571429  764.0952381   670.85714286  483.0952381   479.80952381
-  431.80952381  291.42857143  100.38095238   99.71428571    5.14285714
-   51.19047619]
+[  53.65    5.25  104.55  105.2   305.8   453.15  503.55  506.95  704.15
+  802.05  900.95  802.05  704.15  506.95  503.55  453.15  305.8   105.2
+  104.55    5.25]
 ~~~
 
 which is the average value across columns.
