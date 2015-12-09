@@ -12,48 +12,41 @@ minutes: 30
 > *   Set default values for function parameters.
 > *   Explain why we should divide programs into small, single-purpose functions.
 
-At this point,
-we've written code to draw some interesting features in our inflammation data,
-loop over all our data files to quickly draw these plots for each of them,
-and have Python make decisions based on what it sees in our data.
-But, our code is getting pretty long and complicated;
-what if we had thousands of datasets,
-and didn't want to generate a figure for every single one?
-Commenting out the figure-drawing code is a nuisance.
-Also, what if we want to use that code again,
-on a different dataset or at a different point in our program?
-Cutting and pasting it is going to make our code get very long and very repetative,
-very quickly.
-We'd like a way to package our code so that it is easier to reuse,
-and Python provides for this by letting us define things called 'functions' -
-a shorthand way of re-executing longer pieces of code.
+At this point, we’ve written code to perform our Mandelbrot iterations
+for a specific complex number but that is a far cry of covering all of
+them. Later we want to loop through thousands of those numbers and
+check for each how many iterations it is going to take before they
+"bail out". For this, it would be best to turn our few lines of code
+that perform and count the iterations into a function. Functions are
+re-usable pieces of code that make repeated reference to that code
+easy. Instead of "cutting and pasting" several lines of code every
+time we want to use them, we refer to them by name.
 
-Let's start by defining a function `fahr_to_kelvin` that converts temperatures from Fahrenheit to Kelvin:
+Let's start by defining a function `fahr_to_kelvin` that converts
+temperatures from Fahrenheit to Kelvin:
 
 ~~~ {.python}
 def fahr_to_kelvin(temp):
     return ((temp - 32) * (5/9)) + 273.15
 ~~~
 
-The function definition opens with the word `def`,
-which is followed by the name of the function
-and a parenthesized list of parameter names.
-The [body](reference.html#function-body) of the function --- the
-statements that are executed when it runs --- is indented below the definition line,
-typically by four spaces.
+The function definition opens with the word `def`, which is followed
+by the name of the function and a parenthesized list of parameter
+names.  The [body](reference.html#function-body) of the function ---
+the statements that are executed when it runs --- is indented below
+the definition line, typically by four spaces.
 
-When we call the function,
-the values we pass to it are assigned to those variables
-so that we can use them inside the function.
-Inside the function,
-we use a [return statement](reference.html#return-statement) to send a result back to whoever asked for it.
+When we call the function, the values we pass to it are assigned to
+those variables so that we can use them inside the function.  Inside
+the function, we use a [return
+statement](reference.html#return-statement) to send a result back to
+whoever asked for it.
 
-Let's try running our function.
-Calling our own function is no different from calling any other function:
+Let's try running our function.  Calling our own function is no
+different from calling any other function:
 
 ~~~ {.python}
-print('freezing point of water:', fahr_to_kelvin(32))
-print('boiling point of water:', fahr_to_kelvin(212))
+print('freezing point of water:', fahr_to_kelvin(32),'\n boiling point of water:', fahr_to_kelvin(212))
 ~~~
 ~~~ {.output}
 freezing point of water: 273.15
@@ -63,21 +56,22 @@ boiling point of water: 373.15
 We've successfully called the function that we defined,
 and we have access to the value that we returned.
 
-> ## Integer division {.callout}
+> ## Differences in Python 2/3 {.callout}
 >
-> We are using Python 3, where division always returns a floating point number:
->
+> In Python 3, a division always returns a floating point number. In
+> Python 2, division of one integer by another yields another integer
+> that is truncated from the real value; this is called "integer
+> division". Another difference is that Python 3 requires parenthesis
+> for the print command (because it's a function), while Python 2 does
+> not:
 > ~~~ {.python}
 > $ python3 -c "print(5/9)"
 > ~~~
 > ~~~ {.output}
 > 0.5555555555555556
 > ~~~
->
-> Unfortunately, this wasn't the case in Python 2:
->
 > ~~~ {.python}
-> 5/9
+> $ python -c "print 5/9"
 > ~~~
 > ~~~ {.output}
 > 0
@@ -87,25 +81,7 @@ and we have access to the value that we returned.
 > you need to convert one or the other number to floating point:
 >
 > ~~~ {.python}
-> float(5)/9
-> ~~~
-> ~~~ {.output}
-> 0.555555555556
-> ~~~
-> ~~~ {.python}
-> 5/float(9)
-> ~~~
-> ~~~ {.output}
-> 0.555555555556
-> ~~~
-> ~~~ {.python}
-> 5.0/9
-> ~~~
-> ~~~ {.output}
-> 0.555555555556
-> ~~~
-> ~~~ {.python}
-> 5/9.0
+> $ python -c "print float(5)/9"
 > ~~~
 > ~~~ {.output}
 > 0.555555555556
@@ -114,31 +90,34 @@ and we have access to the value that we returned.
 > And if you want an integer result from division in Python 3,
 > use a double-slash:
 > ~~~ {.python}
-> 4//2
-> ~~~
-> ~~~ {.output}
-> 2
-> ~~~
-> ~~~ {.python}
-> 3//2
+> $ python3 -c "print(3//2)"
 > ~~~
 > ~~~ {.output}
 > 1
 > ~~~
 
+In most cases it's best to use real number instead of integers (just
+put a decimal point at the end like we do in our FtoC example), if the
+full accuracy is required and we want to avoid trouble from integer
+divisions.
+
 ## Composing Functions
 
-Now that we've seen how to turn Fahrenheit into Kelvin,
-it's easy to turn Kelvin into Celsius:
+Now let's try our iteration counter in the form of a function: 
 
 ~~~ {.python}
-def kelvin_to_celsius(temp):
-    return temp - 273.15
+def mandit (b):
+    z=0.0
+    for it in range(1,1000):
+        z=z*z+b
+        if (abs(z)>2.0):
+            break
+    return it
 
-print('absolute zero in Celsius:', kelvin_to_celsius(0.0))
+print ("Number of iterations for (-1,i):", mandit(-1+1j))
 ~~~
 ~~~ {.output}
-absolute zero in Celsius: -273.15
+Number of iterations for (-1,i): 3
 ~~~
 
 What about converting Fahrenheit to Celsius?

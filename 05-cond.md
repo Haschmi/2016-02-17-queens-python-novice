@@ -159,7 +159,8 @@ having to manually examine every plot for features we've seen before.
 
 > ## How many paths? {.challenge}
 >
-> Which of the following would be printed if you were to run this code? Why did you pick this answer?
+> Which of the following would be printed if you were to run this
+> code? Why did you pick this answer?
 >
 > 1.  A
 > 2.  B
@@ -176,13 +177,12 @@ having to manually examine every plot for features we've seen before.
 > ~~~
 
 > ## What is truth? {.challenge}
->
-> `True` and `False` are special words in Python called `booleans` which represent true
-and false statements. However, they aren't the only values in Python that are true and false.
-> In fact, *any* value can be used in an `if` or `elif`.
-> After reading and running the code below,
-> explain what the rule is for which values are considered true and which are considered false.
->
+> `True` and `False` are special words in Python called `booleans`
+> which represent true and false statements. However, they aren't the
+> only values in Python that are true and false.  In fact, *any* value
+> can be used in an `if` or `elif`.  After reading and running the
+> code below, explain what the rule is for which values are considered
+> true and which are considered false.
 > ~~~ {.python}
 > if '':
 >     print('empty string is true')
@@ -200,16 +200,16 @@ and false statements. However, they aren't the only values in Python that are tr
 
 > ## Close enough {.challenge}
 >
-> Write some conditions that print `True` if the variable `a` is within 10% of the variable `b`
-> and `False` otherwise.
-> Compare your implementation with your partner's:
-> do you get the same answer for all possible pairs of numbers?
+> Write some conditions that print `True` if the variable `a` is
+> within 10% of the variable `b` and `False` otherwise.  Compare your
+> implementation with your partner's: do you get the same answer for
+> all possible pairs of numbers?
 
 
 > ## In-place operators {.challenge}
 >
-> Python (and most other languages in the C family) provides [in-place operators](reference.html#in-place-operator)
-> that work like this:
+> Python (and most other languages in the C family) provides [in-place
+> operators](reference.html#in-place-operator) that work like this:
 >
 > ~~~ {.python}
 > x = 1  # original value
@@ -221,9 +221,10 @@ and false statements. However, they aren't the only values in Python that are tr
 > 6
 > ~~~
 >
-> Write some code that sums the positive and negative numbers in a list separately,
-> using in-place operators.
-> Do you think the result is more or less readable than writing the same without in-place operators?
+> Write some code that sums the positive and negative numbers in a
+> list separately, using in-place operators.  Do you think the result
+> is more or less readable than writing the same without in-place
+> operators?
 
 > ## Tuples and exchanges {.challenge}
 >
