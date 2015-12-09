@@ -10,15 +10,16 @@ minutes: 30
 > *   Write conditional statements including `if`, `elif`, and `else` branches.
 > *   Correctly evaluate expressions containing `and` and `or`.
 
-In our last lesson, we discovered something suspicious was going on
-in our inflammation data by drawing some plots.
-How can we use Python to automatically recognize the different features we saw,
-and take a different action for each? In this lesson, we'll learn how to write code that
-runs only when certain conditions are true.
+The Mandelbrot set is based on an iterative process. As explained
+earlier, as soon as the absolute value of our iteration variable
+exceeds 2, the underlying series diverges, and we're "done". In this
+lesson, we’ll learn how to write code that runs only when certain
+conditions are true.
 
 ## Conditionals
 
-We can ask Python to take different actions, depending on a condition, with an if statement:
+We can ask Python to take different actions, depending on a condition,
+with an if statement:
 
 ~~~ {.python}
 num = 37
@@ -34,13 +35,11 @@ done
 
 ~~~
 
-The second line of this code uses the keyword `if` to tell Python that we want to make a choice.
-If the test that follows the `if` statement is true,
-the body of the `if`
-(i.e., the lines indented underneath it) are executed.
-If the test is false,
-the body of the `else` is executed instead.
-Only one or the other is ever executed:
+The second line of this code uses the keyword `if` to tell Python that
+we want to make a choice.  If the test that follows the `if` statement
+is true, the body of the `if` (i.e., the lines indented underneath it)
+are executed.  If the test is false, the body of the `else` is
+executed instead.  Only one or the other is ever executed:
 
 ![Executing a Conditional](fig/python-flowchart-conditional.svg)\
 
@@ -49,127 +48,114 @@ If there isn't one,
 Python simply does nothing if the test is false:
 
 ~~~ {.python}
-num = 53
-print('before conditional...')
+num = 37
 if num > 100:
     print('53 is greater than 100')
-print('...after conditional')
-~~~
-~~~ {.output}
-before conditional...
-...after conditional
+
 ~~~
 
-We can also chain several tests together using `elif`,
-which is short for "else if".
-The following Python code uses `elif` to print the sign of a number.
+(nothing happens). We can also chain several tests together using
+`elif`, which is short for "else if".  The following Python code uses
+`elif` to print the sign of a number.
 
 ~~~ {.python}
-num = -3
-
 if num > 0:
-    print(num, "is positive")
+    print("Positive")
 elif num == 0:
-    print(num, "is zero")
+    print("Zero")
 else:
-    print(num, "is negative")
+    print("Negative")
 ~~~
 ~~~ {.output}
-"-3 is negative"
+Positive
 ~~~
 
-One important thing to notice in the code above is that we use a double equals sign `==` to test for equality
-rather than a single equals sign
-because the latter is used to mean assignment.
+Note that for all this stuff we use the same convention as for loops:
+Everything that is indented by the same amount and follows a colon ":"
+belongs to the same "block" and is executed together.
+
+One important thing to notice in the code above is that we use a
+double equals sign `==` to test for equality rather than a single
+equals sign because the latter is used to mean assignment.
 
 We can also combine tests using `and` and `or`.
 `and` is only true if both parts are true:
 
 ~~~ {.python}
-if (1 > 0) and (-1 > 0):
-    print('both parts are true')
+if (1>0) and (1<0):
+    print ("Both are true")
 else:
-    print('one part is not true')
+    print ("At least one is not true")
 ~~~
 ~~~ {.output}
-one part is not true
+At least one is not true
 ~~~
 
 while `or` is true if at least one part is true:
 
 ~~~ {.python}
-if (1 < 0) or (-1 < 0):
-    print('at least one test is true')
+if (1>0) or (1<0):
+    print ("At least one is true")
+else:
+    print ("Neither is true")
 ~~~
 ~~~ {.output}
-at least one test is true
+At least one is true
 ~~~
 
-## Checking our Data
+## Counting Mandelbrot Iterations
 
-Now that we've seen how conditionals work,
-we can use them to check for the suspicious features we saw in our inflammation data.
-In the first couple of plots, the maximum inflammation per day
-seemed to rise like a straight line, one unit per day.
-We can check for this inside the `for` loop we wrote with the following conditional:
+Now that we’ve seen how conditionals work, we can use them to run one
+of our Mandelbrot series. The first thing we need is a package called
+cmath that teaches Python complex math:
 
 ~~~ {.python}
-if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
-    print('Suspicious looking maxima!')
+import cmath
 ~~~
 
-We also saw a different problem in the third dataset;
-the minima per day were all zero (looks like a healthy person snuck into our study).
-We can also check for this with an `elif` condition:
+This package has a constant 1j that stands for the imaginary unit i,
+i.e. the square-root of -1. Otherwise the complex-math package handles
+numbers that contain this constant just like any other number, so
+let's set a variable to a complex number:
 
 ~~~{.python}
-elif data.min(axis=0).sum() == 0:
-    print('Minima add up to zero!')
+b=-1.0+1j
 ~~~
 
-And if neither of these conditions are true, we can use `else` to give the all-clear:
+Now we initialize our test variable and try out, say a thousand times
+at maximum, if the Mandelbrot iteration yields a number that is
+greater than 2:
 
 ~~~ {.python}
-else:
-    print('Seems OK!')
+z=0.0
+for it in range(1,1001):
+    z=z*z+b
+    if (abs(z)>2.0):
+        break
 ~~~
 
-Let's test that out:
+The second line defines how many iterations we try (1000 with
+iteration number it). The third one performs the "square and add"
+iteration. Line three tests if it's going to diverge; note that the
+abs function computes the absolute value which is a measure of the
+size of a complex number. The break' command in the fourth line tells
+it to "jump out of the loop" if the divergence criterion is fulfilled.
+
+Now we can print out the result of our little test:
 
 ~~~ {.python}
-data = numpy.loadtxt(fname='inflammation-01.csv', delimiter=',')
-if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
-    print('Suspicious looking maxima!')
-elif data.min(axis=0).sum() == 0:
-    print('Minima add up to zero!')
-else:
-    print('Seems OK!')
+print b, "bails out after", it, "iterations"
 ~~~
 
 ~~~ {.output}
-Suspicious looking maxima!
+(-1+1j) bails out after 3 iterations
 ~~~
 
-~~~ {.python}
-data = numpy.loadtxt(fname='inflammation-03.csv', delimiter=',')
-if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
-    print('Suspicious looking maxima!')
-elif data.min(axis=0).sum() == 0:
-    print('Minima add up to zero!')
-else:
-    print('Seems OK!')
-~~~
-
-~~~ {.output}
-Minima add up to zero!
-~~~
-
-In this way,
-we have asked Python to do something different depending on the condition of our data.
-Here we printed messages in all cases,
-but we could also imagine not using the `else` catch-all
-so that messages are only printed when something is wrong,
-freeing us from having to manually examine every plot for features we've seen before.
+In this way, we have asked Python to do something different depending
+on the condition of our data.  Here we printed messages in all cases,
+but we could also imagine not using the `else` catch-all so that
+messages are only printed when something is wrong, freeing us from
+having to manually examine every plot for features we've seen before.
 
 > ## How many paths? {.challenge}
 >

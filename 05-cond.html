@@ -40,7 +40,7 @@
 </ul>
 </div>
 </section>
-<p>In our last lesson, we discovered something suspicious was going on in our inflammation data by drawing some plots. How can we use Python to automatically recognize the different features we saw, and take a different action for each? In this lesson, we’ll learn how to write code that runs only when certain conditions are true.</p>
+<p>The Mandelbrot set is based on an iterative process. As explained earlier, as soon as the absolute value of our iteration variable exceeds 2, the underlying series diverges, and we’re “done”. In this lesson, we’ll learn how to write code that runs only when certain conditions are true.</p>
 <h2 id="conditionals">Conditionals</h2>
 <p>We can ask Python to take different actions, depending on a condition, with an if statement:</p>
 <pre class="sourceCode python"><code class="sourceCode python">num = <span class="dv">37</span>
@@ -54,61 +54,46 @@ done
 </code></pre>
 <p>The second line of this code uses the keyword <code>if</code> to tell Python that we want to make a choice. If the test that follows the <code>if</code> statement is true, the body of the <code>if</code> (i.e., the lines indented underneath it) are executed. If the test is false, the body of the <code>else</code> is executed instead. Only one or the other is ever executed:</p>
 <p><img src="fig/python-flowchart-conditional.svg" alt="Executing a Conditional" /><br /> Conditional statements don’t have to include an <code>else</code>. If there isn’t one, Python simply does nothing if the test is false:</p>
-<pre class="sourceCode python"><code class="sourceCode python">num = <span class="dv">53</span>
-<span class="dt">print</span>(<span class="st">&#39;before conditional...&#39;</span>)
+<pre class="sourceCode python"><code class="sourceCode python">num = <span class="dv">37</span>
 <span class="kw">if</span> num &gt; <span class="dv">100</span>:
-    <span class="dt">print</span>(<span class="st">&#39;53 is greater than 100&#39;</span>)
-<span class="dt">print</span>(<span class="st">&#39;...after conditional&#39;</span>)</code></pre>
-<pre class="output"><code>before conditional...
-...after conditional</code></pre>
-<p>We can also chain several tests together using <code>elif</code>, which is short for “else if”. The following Python code uses <code>elif</code> to print the sign of a number.</p>
-<pre class="sourceCode python"><code class="sourceCode python">num = -<span class="dv">3</span>
-
-<span class="kw">if</span> num &gt; <span class="dv">0</span>:
-    <span class="dt">print</span>(num, <span class="st">&quot;is positive&quot;</span>)
+    <span class="dt">print</span>(<span class="st">&#39;53 is greater than 100&#39;</span>)</code></pre>
+<p>(nothing happens). We can also chain several tests together using <code>elif</code>, which is short for “else if”. The following Python code uses <code>elif</code> to print the sign of a number.</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> num &gt; <span class="dv">0</span>:
+    <span class="dt">print</span>(<span class="st">&quot;Positive&quot;</span>)
 <span class="kw">elif</span> num == <span class="dv">0</span>:
-    <span class="dt">print</span>(num, <span class="st">&quot;is zero&quot;</span>)
+    <span class="dt">print</span>(<span class="st">&quot;Zero&quot;</span>)
 <span class="kw">else</span>:
-    <span class="dt">print</span>(num, <span class="st">&quot;is negative&quot;</span>)</code></pre>
-<pre class="output"><code>&quot;-3 is negative&quot;</code></pre>
+    <span class="dt">print</span>(<span class="st">&quot;Negative&quot;</span>)</code></pre>
+<pre class="output"><code>Positive</code></pre>
+<p>Note that for all this stuff we use the same convention as for loops: Everything that is indented by the same amount and follows a colon “:” belongs to the same “block” and is executed together.</p>
 <p>One important thing to notice in the code above is that we use a double equals sign <code>==</code> to test for equality rather than a single equals sign because the latter is used to mean assignment.</p>
 <p>We can also combine tests using <code>and</code> and <code>or</code>. <code>and</code> is only true if both parts are true:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> (<span class="dv">1</span> &gt; <span class="dv">0</span>) and (-<span class="dv">1</span> &gt; <span class="dv">0</span>):
-    <span class="dt">print</span>(<span class="st">&#39;both parts are true&#39;</span>)
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> (<span class="dv">1</span>&gt;<span class="dv">0</span>) and (<span class="dv">1</span>&lt;<span class="dv">0</span>):
+    <span class="dt">print</span> (<span class="st">&quot;Both are true&quot;</span>)
 <span class="kw">else</span>:
-    <span class="dt">print</span>(<span class="st">&#39;one part is not true&#39;</span>)</code></pre>
-<pre class="output"><code>one part is not true</code></pre>
+    <span class="dt">print</span> (<span class="st">&quot;At least one is not true&quot;</span>)</code></pre>
+<pre class="output"><code>At least one is not true</code></pre>
 <p>while <code>or</code> is true if at least one part is true:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> (<span class="dv">1</span> &lt; <span class="dv">0</span>) or (-<span class="dv">1</span> &lt; <span class="dv">0</span>):
-    <span class="dt">print</span>(<span class="st">&#39;at least one test is true&#39;</span>)</code></pre>
-<pre class="output"><code>at least one test is true</code></pre>
-<h2 id="checking-our-data">Checking our Data</h2>
-<p>Now that we’ve seen how conditionals work, we can use them to check for the suspicious features we saw in our inflammation data. In the first couple of plots, the maximum inflammation per day seemed to rise like a straight line, one unit per day. We can check for this inside the <code>for</code> loop we wrote with the following conditional:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">0</span>] == <span class="dv">0</span> and data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">20</span>] == <span class="dv">20</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Suspicious looking maxima!&#39;</span>)</code></pre>
-<p>We also saw a different problem in the third dataset; the minima per day were all zero (looks like a healthy person snuck into our study). We can also check for this with an <code>elif</code> condition:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">elif</span> data.<span class="dt">min</span>(axis=<span class="dv">0</span>).<span class="dt">sum</span>() == <span class="dv">0</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Minima add up to zero!&#39;</span>)</code></pre>
-<p>And if neither of these conditions are true, we can use <code>else</code> to give the all-clear:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">else</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Seems OK!&#39;</span>)</code></pre>
-<p>Let’s test that out:</p>
-<pre class="sourceCode python"><code class="sourceCode python">data = numpy.loadtxt(fname=<span class="st">&#39;inflammation-01.csv&#39;</span>, delimiter=<span class="st">&#39;,&#39;</span>)
-<span class="kw">if</span> data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">0</span>] == <span class="dv">0</span> and data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">20</span>] == <span class="dv">20</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Suspicious looking maxima!&#39;</span>)
-<span class="kw">elif</span> data.<span class="dt">min</span>(axis=<span class="dv">0</span>).<span class="dt">sum</span>() == <span class="dv">0</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Minima add up to zero!&#39;</span>)
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">if</span> (<span class="dv">1</span>&gt;<span class="dv">0</span>) or (<span class="dv">1</span>&lt;<span class="dv">0</span>):
+    <span class="dt">print</span> (<span class="st">&quot;At least one is true&quot;</span>)
 <span class="kw">else</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Seems OK!&#39;</span>)</code></pre>
-<pre class="output"><code>Suspicious looking maxima!</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python">data = numpy.loadtxt(fname=<span class="st">&#39;inflammation-03.csv&#39;</span>, delimiter=<span class="st">&#39;,&#39;</span>)
-<span class="kw">if</span> data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">0</span>] == <span class="dv">0</span> and data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">20</span>] == <span class="dv">20</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Suspicious looking maxima!&#39;</span>)
-<span class="kw">elif</span> data.<span class="dt">min</span>(axis=<span class="dv">0</span>).<span class="dt">sum</span>() == <span class="dv">0</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Minima add up to zero!&#39;</span>)
-<span class="kw">else</span>:
-    <span class="dt">print</span>(<span class="st">&#39;Seems OK!&#39;</span>)</code></pre>
-<pre class="output"><code>Minima add up to zero!</code></pre>
+    <span class="dt">print</span> (<span class="st">&quot;Neither is true&quot;</span>)</code></pre>
+<pre class="output"><code>At least one is true</code></pre>
+<h2 id="counting-mandelbrot-iterations">Counting Mandelbrot Iterations</h2>
+<p>Now that we’ve seen how conditionals work, we can use them to run one of our Mandelbrot series. The first thing we need is a package called cmath that teaches Python complex math:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">import</span> cmath</code></pre>
+<p>This package has a constant 1j that stands for the imaginary unit i, i.e. the square-root of -1. Otherwise the complex-math package handles numbers that contain this constant just like any other number, so let’s set a variable to a complex number:</p>
+<pre class="sourceCode python"><code class="sourceCode python">b=-<span class="fl">1.0</span>+1j</code></pre>
+<p>Now we initialize our test variable and try out, say a thousand times at maximum, if the Mandelbrot iteration yields a number that is greater than 2:</p>
+<pre class="sourceCode python"><code class="sourceCode python">z=<span class="fl">0.0</span>
+<span class="kw">for</span> it in <span class="dt">range</span>(<span class="dv">1</span>,<span class="dv">1001</span>):
+    z=z*z+b
+    <span class="kw">if</span> (<span class="dt">abs</span>(z)&gt;<span class="fl">2.0</span>):
+        <span class="kw">break</span></code></pre>
+<p>The second line defines how many iterations we try (1000 with iteration number it). The third one performs the “square and add” iteration. Line three tests if it’s going to diverge; note that the abs function computes the absolute value which is a measure of the size of a complex number. The break’ command in the fourth line tells it to “jump out of the loop” if the divergence criterion is fulfilled.</p>
+<p>Now we can print out the result of our little test:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> b, <span class="st">&quot;bails out after&quot;</span>, it, <span class="st">&quot;iterations&quot;</span></code></pre>
+<pre class="output"><code>(-1+1j) bails out after 3 iterations</code></pre>
 <p>In this way, we have asked Python to do something different depending on the condition of our data. Here we printed messages in all cases, but we could also imagine not using the <code>else</code> catch-all so that messages are only printed when something is wrong, freeing us from having to manually examine every plot for features we’ve seen before.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
