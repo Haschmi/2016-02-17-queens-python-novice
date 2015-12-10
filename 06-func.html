@@ -70,7 +70,7 @@ boiling point of water: 373.15</code></pre>
 <p>Now let’s try our iteration counter in the form of a function:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> mandit (b):
     z=<span class="fl">0.0</span>
-    <span class="kw">for</span> it in <span class="dt">range</span>(<span class="dv">1</span>,<span class="dv">1000</span>):
+    <span class="kw">for</span> it in <span class="dt">range</span>(<span class="dv">1</span>,<span class="dv">1001</span>):
         z=z*z+b
         <span class="kw">if</span> (<span class="dt">abs</span>(z)&gt;<span class="fl">2.0</span>):
             <span class="kw">break</span>
@@ -78,150 +78,142 @@ boiling point of water: 373.15</code></pre>
 
 <span class="dt">print</span> (<span class="st">&quot;Number of iterations for (-1,i):&quot;</span>, mandit(-<span class="dv">1</span>+1j))</code></pre>
 <pre class="output"><code>Number of iterations for (-1,i): 3</code></pre>
-<p>What about converting Fahrenheit to Celsius? We could write out the formula, but we don’t need to. Instead, we can <a href="reference.html#function-composition">compose</a> the two functions we have already created:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> fahr_to_celsius(temp):
-    temp_k = fahr_to_kelvin(temp)
-    result = kelvin_to_celsius(temp_k)
-    <span class="kw">return</span> result
-
-<span class="dt">print</span>(<span class="st">&#39;freezing point of water in Celsius:&#39;</span>, fahr_to_celsius(<span class="fl">32.0</span>))</code></pre>
-<pre class="output"><code>freezing point of water in Celsius: 0.0</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> (<span class="st">&quot;Number of iterations for (-0.5,0.5i):&quot;</span>, mandit(-<span class="fl">0.5+0.</span>5j))</code></pre>
+<pre class="output"><code>Number of iterations for (-0.5,0.5i): 1000</code></pre>
 <p>This is our first taste of how larger programs are built: we define basic operations, then combine them in ever-large chunks to get the effect we want. Real-life functions will usually be larger than the ones shown here — typically half a dozen to a few dozen lines — but they shouldn’t ever be much longer than that, or the next person who reads it won’t be able to understand what’s going on.</p>
-<h2 id="tidying-up">Tidying up</h2>
-<p>Now that we know how to wrap bits of code up in functions, we can make our inflammation analyasis easier to read and easier to reuse. First, let’s make an <code>analyze</code> function that generates our plots:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> analyze(filename):
-
-    data = np.loadtxt(fname=filename, delimiter=<span class="st">&#39;,&#39;</span>)
-
-    fig = plt.figure(figsize=(<span class="fl">10.0</span>, <span class="fl">3.0</span>))
-
-    axes1 = fig.add_subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)
-    axes2 = fig.add_subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>)
-    axes3 = fig.add_subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)
-
-    axes1.set_ylabel(<span class="st">&#39;average&#39;</span>)
-    axes1.plot(data.mean(axis=<span class="dv">0</span>))
-
-    axes2.set_ylabel(<span class="st">&#39;max&#39;</span>)
-    axes2.plot(data.<span class="dt">max</span>(axis=<span class="dv">0</span>))
-
-    axes3.set_ylabel(<span class="st">&#39;min&#39;</span>)
-    axes3.plot(data.<span class="dt">min</span>(axis=<span class="dv">0</span>))
-
-    fig.tight_layout()
-    plt.show(fig)</code></pre>
-<p>and another function called <code>detect_problems</code> that checks for those systematics we noticed:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> detect_problems(filename):
-
-    data = np.loadtxt(fname=filename, delimiter=<span class="st">&#39;,&#39;</span>)
-
-    <span class="kw">if</span> data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">0</span>] == <span class="dv">0</span> and data.<span class="dt">max</span>(axis=<span class="dv">0</span>)[<span class="dv">20</span>] == <span class="dv">20</span>:
-        <span class="dt">print</span>(<span class="st">&#39;Suspicious looking maxima!&#39;</span>)
-    <span class="kw">elif</span> data.<span class="dt">min</span>(axis=<span class="dv">0</span>).<span class="dt">sum</span>() == <span class="dv">0</span>:
-        <span class="dt">print</span>(<span class="st">&#39;Minima add up to zero!&#39;</span>)
-    <span class="kw">else</span>:
-        <span class="dt">print</span>(<span class="st">&#39;Seems OK!&#39;</span>)</code></pre>
-<p>Notice that rather than jumbling this code together in one giant <code>for</code> loop, we can now read and reuse both ideas separately. We can reproduce the previous analysis with a much simpler <code>for</code> loop:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">for</span> f in filenames[:<span class="dv">3</span>]:
-    <span class="dt">print</span>(f)
-    analyze(f)
-    detect_problems(f)</code></pre>
 <p>By giving our functions human-readable names, we can more easily read and understand what is happening in the <code>for</code> loop. Even better, if at some later date we want to use either of those pieces of code again, we can do so in a single line.</p>
+<h2 id="using-functions-in-loops">Using Functions in Loops</h2>
+<p>At this point it is easy to see how we can repeatedly call the function mandit inside a two nested loops to compute as many points on the Mandelbrot set as we want:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">for</span> i in <span class="dt">range</span>(<span class="dv">0</span>,<span class="dv">4</span>):
+    <span class="kw">for</span> j in <span class="dt">range</span>(<span class="dv">0</span>,<span class="dv">4</span>):
+         c=-<span class="fl">1.5+0.5</span>*i+(-<span class="fl">1.0+0.5</span>*j)*1j
+         <span class="dt">print</span> (c,<span class="st">&quot;bails after&quot;</span>,mandit(c),<span class="st">&quot;its&quot;</span>)
+     </code></pre>
+<pre class="output"><code>(-1.5-1j) bails after 2 its
+(-1.5-0.5j) bails after 3 its
+(-1.5+0j) bails after 1000 its
+(-1.5+0.5j) bails after 3 its
+(-1-1j) bails after 3 its
+(-1-0.5j) bails after 5 its
+(-1+0j) bails after 1000 its
+(-1+0.5j) bails after 5 its
+(-0.5-1j) bails after 4 its
+(-0.5-0.5j) bails after 1000 its
+(-0.5+0j) bails after 1000 its
+(-0.5+0.5j) bails after 1000 its
+-1j bails after 1000 its
+-0.5j bails after 1000 its
+0j bails after 1000 its
+0.5j bails after 1000 its</code></pre>
+<p>This is getting pretty close to the data that we used at the beginning of the section. Those were 20x20 and they were in the form of a numpy array, so let’s try to reproduce this:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">for</span> i in <span class="dt">range</span>(<span class="dv">0</span>,<span class="dv">20</span>):
+    <span class="kw">for</span> j in <span class="dt">range</span>(<span class="dv">0</span>,<span class="dv">20</span>):
+         c=-<span class="fl">1.5+0.1</span>*i+(-<span class="fl">1.0+0.1</span>*j)*1j
+         a[j][i]=mandit.mandit(c)
+
+<span class="dt">print</span>(a)</code></pre>
+<pre class="output"><code>[[    2.     3.     3.     3.     3.     3.     3.     3.     3.     4.
+      4.     4.     5.     7.     9.  1000.     4.     4.     3.     3.]
+ [    3.     3.     3.     3.     3.     3.     3.     4.     4.     4.
+      4.     5.     6.     9.    24.     8.     5.     4.     4.     3.]
+ [    3.     3.     3.     3.     3.     3.     4.     4.     4.     4.
+      5.     6.     8.  1000.  1000.    18.     6.     5.     5.     4.]
+ [    3.     3.     3.     3.     3.     4.     4.     4.     5.     7.
+      8.     8.    10.  1000.  1000.    13.     9.     6.     6.     5.]
+ [    3.     3.     3.     3.     4.     4.     5.     5.     6.    12.
+   1000.    26.  1000.  1000.  1000.  1000.  1000.    12.    15.    15.]
+ [    3.     3.     4.     5.     5.     5.     5.     6.     8.    12.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     7.]
+ [    4.     5.     7.     7.     7.     7.     7.     7.    11.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     9.]
+ [    5.     5.     7.    16.    12.    35.    11.     9.    24.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.    15.]
+ [    5.     6.     8.    18.  1000.  1000.  1000.    15.  1000.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.    31.]
+ [    7.    12.    14.  1000.  1000.  1000.  1000.  1000.  1000.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     8.]
+ [ 1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.    12.     7.]
+ [    7.    12.    14.  1000.  1000.  1000.  1000.  1000.  1000.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     8.]
+ [    5.     6.     8.    18.  1000.  1000.  1000.    15.  1000.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.    31.]
+ [    5.     5.     7.    16.    12.    35.    11.     9.    24.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.    15.]
+ [    4.     5.     7.     7.     7.     7.     7.     7.    11.  1000.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     9.]
+ [    3.     3.     4.     5.     5.     5.     5.     6.     8.    12.
+   1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.  1000.     7.]
+ [    3.     3.     3.     3.     4.     4.     5.     5.     6.    12.
+   1000.    26.  1000.  1000.  1000.  1000.  1000.    12.    15.    15.]
+ [    3.     3.     3.     3.     3.     4.     4.     4.     5.     7.
+      8.     8.    10.  1000.  1000.    13.     9.     6.     6.     5.]
+ [    3.     3.     3.     3.     3.     3.     4.     4.     4.     4.
+      5.     6.     8.  1000.  1000.    18.     6.     5.     5.     4.]
+ [    3.     3.     3.     3.     3.     3.     3.     4.     4.     4.
+      4.     5.     6.     9.    24.     8.     5.     4.     4.     3.]]</code></pre>
+<p>The beauty of this is that once we defined the function, we can re-use it in every new loop we are making, and don’t have to re-type (or cut-and-paste) the instructions.</p>
 <h2 id="testing-and-documenting">Testing and Documenting</h2>
-<p>Once we start putting things in functions so that we can re-use them, we need to start testing that those functions are working correctly. To see how to do this, let’s write a function to center a dataset around a particular value:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> center(data, desired):
-    <span class="kw">return</span> (data - data.mean()) + desired</code></pre>
-<p>We could test this on our actual data, but since we don’t know what the values ought to be, it will be hard to tell if the result was correct. Instead, let’s use NumPy to create a matrix of 0’s and then center that around 3:</p>
-<pre class="sourceCode python"><code class="sourceCode python">z = numpy.zeros((<span class="dv">2</span>,<span class="dv">2</span>))
-<span class="dt">print</span>(center(z, <span class="dv">3</span>))</code></pre>
-<pre class="output"><code>[[ 3.  3.]
- [ 3.  3.]]</code></pre>
-<p>That looks right, so let’s try <code>center</code> on our real data:</p>
-<pre class="sourceCode python"><code class="sourceCode python">data = numpy.loadtxt(fname=<span class="st">&#39;inflammation-01.csv&#39;</span>, delimiter=<span class="st">&#39;,&#39;</span>)
-<span class="dt">print</span>(center(data, <span class="dv">0</span>))</code></pre>
-<pre class="output"><code>[[-6.14875 -6.14875 -5.14875 ..., -3.14875 -6.14875 -6.14875]
- [-6.14875 -5.14875 -4.14875 ..., -5.14875 -6.14875 -5.14875]
- [-6.14875 -5.14875 -5.14875 ..., -4.14875 -5.14875 -5.14875]
- ...,
- [-6.14875 -5.14875 -5.14875 ..., -5.14875 -5.14875 -5.14875]
- [-6.14875 -6.14875 -6.14875 ..., -6.14875 -4.14875 -6.14875]
- [-6.14875 -6.14875 -5.14875 ..., -5.14875 -5.14875 -6.14875]]</code></pre>
-<p>It’s hard to tell from the default output whether the result is correct, but there are a few simple tests that will reassure us:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="st">&#39;original min, mean, and max are:&#39;</span>, data.<span class="dt">min</span>(), data.mean(), data.<span class="dt">max</span>())
-centered = center(data, <span class="dv">0</span>)
-<span class="dt">print</span>(<span class="st">&#39;min, mean, and and max of centered data are:&#39;</span>, centered.<span class="dt">min</span>(), centered.mean(), centered.<span class="dt">max</span>())</code></pre>
-<pre class="output"><code>original min, mean, and max are: 0.0 6.14875 20.0
-min, mean, and and max of centered data are: -6.14875 2.84217094304e-16 13.85125</code></pre>
-<p>That seems almost right: the original mean was about 6.1, so the lower bound from zero is how about -6.1. The mean of the centered data isn’t quite zero — we’ll explore why not in the challenges — but it’s pretty close. We can even go further and check that the standard deviation hasn’t changed:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="st">&#39;std dev before and after:&#39;</span>, data.std(), centered.std())</code></pre>
-<pre class="output"><code>std dev before and after: 4.61383319712 4.61383319712</code></pre>
-<p>Those values look the same, but we probably wouldn’t notice if they were different in the sixth decimal place. Let’s do this instead:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="st">&#39;difference in standard deviations before and after:&#39;</span>, data.std() - centered.std())</code></pre>
-<pre class="output"><code>difference in standard deviations before and after: -3.5527136788e-15</code></pre>
-<p>Again, the difference is very small. It’s still possible that our function is wrong, but it seems unlikely enough that we should probably get back to doing our analysis. We have one more task first, though: we should write some <a href="reference.html#documentation">documentation</a> for our function to remind ourselves later what it’s for and how to use it.</p>
-<p>The usual way to put documentation in software is to add <a href="reference.html#comment">comments</a> like this:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># center(data, desired): return a new array containing the original data centered around the desired value.</span>
-<span class="kw">def</span> center(data, desired):
-    <span class="kw">return</span> (data - data.mean()) + desired</code></pre>
-<p>There’s a better way, though. If the first thing in a function is a string that isn’t assigned to a variable, that string is attached to the function as its documentation:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> center(data, desired):
-    <span class="co">&#39;&#39;&#39;Return a new array containing the original data centered around the desired value.&#39;&#39;&#39;</span>
-    <span class="kw">return</span> (data - data.mean()) + desired</code></pre>
-<p>This is better because we can now ask Python’s built-in help system to show us the documentation for the function:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">help</span>(center)</code></pre>
-<pre class="output"><code>Help on function center in module __main__:
+<p>Once we start putting things in functions so that we can re-use them, we need to start testing that those functions are working correctly. The easiest way to do this in our case is to plot our results. Since we already have stored our results in the form of a “numpy array”, this should be easy to do:</p>
+<pre class="sourceCode python"><code class="sourceCode python">plt.show(plt.imshow(a))</code></pre>
+<p>Well, it looks right. In fact the picture is pretty much identical of what we got when we looked at the input data. We could of course also directly compare the data by reading in the original data and subtracting them in bulk from our array. The result should be all close to zero. Why not write a function for that:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> compare(data, reference):
+    <span class="co">&#39;&#39;&#39;Compares one set of data to another and returns the difference.&#39;&#39;&#39;</span>
+    <span class="kw">return</span> data-reference
 
-center(data, desired)
-    Return a new array containing the original data centered around the desired value.
-</code></pre>
-<p>A string like this is called a <a href="reference.html#docstring">docstring</a>. We don’t need to use triple quotes when we write one, but if we do, we can break the string across multiple lines:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> center(data, desired):
-    <span class="co">&#39;&#39;&#39;Return a new array containing the original data centered around the desired value.</span>
-<span class="co">    Example: center([1, 2, 3], 0) =&gt; [-1, 0, 1]&#39;&#39;&#39;</span>
-    <span class="kw">return</span> (data - data.mean()) + desired
+ref=np.loadtxt(fname=<span class="st">&#39;mandel-small.csv&#39;</span>, delimiter=<span class="st">&#39;,&#39;</span>)
+<span class="dt">print</span>(compare(a,ref))</code></pre>
+<pre class="output"><code>[[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+   0.  0.]
+(...etc...)
+ [ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+   0.  0.]]</code></pre>
+<p>Bingo. A bit long though, particularly if we are checking larger amounts of data. We can take all the absolute values of the differences and sum them up across the whole array, for one single value:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="dt">sum</span>(<span class="dt">sum</span>(<span class="dt">abs</span>(compare(a,ref)))))</code></pre>
+<pre class="output"><code>0.0</code></pre>
+<p>which means that all the errors combined in the two data sets yield exactly zilch, i.e. they are identical. But what is this stuff in the triple-quotes in compare()? This is to insert some documentation for our function to remind ourselves later what it’s for and how to use it.</p>
+<p>If the first thing in a function is a string that isn’t assigned to a variable, that string is attached to the function as its documentation: We can now ask Python’s built-in help system to show us the documentation for the function:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">help</span>(compare)</code></pre>
+<pre class="output"><code>Help on function compare in module __main__:
 
-<span class="dt">help</span>(center)</code></pre>
-<pre class="output"><code>Help on function center in module __main__:
+compare(data, reference)
+    Compares one set of data to another and returns the difference.</code></pre>
+<p>A string like this is called a docstring. We don’t need to use triple quotes when we write one, but if we do, we can break the string across multiple lines:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> compare(data, reference):
+    <span class="co">&#39;&#39;&#39;Compares one set of data to another and returns the difference. </span>
+<span class="co">       Both data sets need to have the same shape.</span>
+<span class="co">       Example: compare(3,5) returns -2&#39;&#39;&#39;</span>
+    <span class="kw">return</span> data-reference
 
-center(data, desired)
-    Return a new array containing the original data centered around the desired value.
-    Example: center([1, 2, 3], 0) =&gt; [-1, 0, 1]
-</code></pre>
+<span class="dt">help</span>(compare)</code></pre>
+<pre class="output"><code>Help on function compare in module __main__:
+
+compare(data, reference)
+    Compares one set of data to another and returns the difference. 
+    Both data sets need to have the same shape.
+    Example: compare(3,5) returns -2</code></pre>
 <h2 id="defining-defaults">Defining Defaults</h2>
-<p>We have passed parameters to functions in two ways: directly, as in <code>type(data)</code>, and by name, as in <code>numpy.loadtxt(fname='something.csv', delimiter=',')</code>. In fact, we can pass the filename to <code>loadtxt</code> without the <code>fname=</code>:</p>
-<pre class="sourceCode python"><code class="sourceCode python">numpy.loadtxt(<span class="st">&#39;inflammation-01.csv&#39;</span>, delimiter=<span class="st">&#39;,&#39;</span>)</code></pre>
-<pre class="output"><code>array([[ 0.,  0.,  1., ...,  3.,  0.,  0.],
-       [ 0.,  1.,  2., ...,  1.,  0.,  1.],
-       [ 0.,  1.,  1., ...,  2.,  1.,  1.],
-       ...,
-       [ 0.,  1.,  1., ...,  1.,  1.,  1.],
-       [ 0.,  0.,  0., ...,  0.,  2.,  0.],
-       [ 0.,  0.,  1., ...,  1.,  1.,  0.]])</code></pre>
+<p>We have passed parameters to functions in two ways: directly, as in compare(a,ref), and by name, as in np.loadtxt(fname=‘mandel-small.csv’, delimiter=‘,’). In fact, we can pass the filename to loadtxt without the fname=:</p>
+<pre class="sourceCode python"><code class="sourceCode python">np.loadtxt(<span class="st">&#39;mandel-small.csv&#39;</span>,delimiter=<span class="st">&#39;,&#39;</span>)</code></pre>
+<pre class="output"><code>array([[    2.,     3.,     3.,     3.,     3.,     3.,     3.,     3.,
+            3.,     4.,     4.,     4.,     5.,     7.,     9.,  1000.,
+            4.,     4.,     3.,     3.,     2.], ...bla bla bla...</code></pre>
 <p>but we still need to say <code>delimiter=</code>:</p>
-<pre class="sourceCode python"><code class="sourceCode python">numpy.loadtxt(<span class="st">&#39;inflammation-01.csv&#39;</span>, <span class="st">&#39;,&#39;</span>)</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-TypeError                                 Traceback (most recent call last)
-&lt;ipython-input-26-e3bc6cf4fd6a&gt; in &lt;module&gt;()
-----&gt; 1 numpy.loadtxt(&#39;inflammation-01.csv&#39;, &#39;,&#39;)
-
-/Users/gwilson/anaconda/lib/python2.7/site-packages/numpy/lib/npyio.pyc in loadtxt(fname, dtype, comments, delimiter, converters, skiprows, usecols, unpack, ndmin)
-    775     try:
-    776         # Make sure we&#39;re dealing with a proper dtype
---&gt; 777         dtype = np.dtype(dtype)
-    778         defconv = _getconv(dtype)
-    779
-
+<pre class="sourceCode python"><code class="sourceCode python">numpy.loadtxt(<span class="st">&#39;mandel-small.csv&#39;</span>, <span class="st">&#39;,&#39;</span>)</code></pre>
+<pre class="error"><code>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/opt/python/anaconda3-2.3.0/lib/python3.4/site-packages/numpy/lib/npyio.py&quot;, line 805, in loadtxt
+    dtype = np.dtype(dtype)
 TypeError: data type &quot;,&quot; not understood</code></pre>
-<p>To understand what’s going on, and make our own functions easier to use, let’s re-define our <code>center</code> function like this:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> center(data, desired=<span class="fl">0.0</span>):
-    <span class="co">&#39;&#39;&#39;Return a new array containing the original data centered around the desired value (0 by default).</span>
-<span class="co">    Example: center([1, 2, 3], 0) =&gt; [-1, 0, 1]&#39;&#39;&#39;</span>
-    <span class="kw">return</span> (data - data.mean()) + desired</code></pre>
-<p>The key change is that the second parameter is now written <code>desired=0.0</code> instead of just <code>desired</code>. If we call the function with two arguments, it works as it did before:</p>
-<pre class="sourceCode python"><code class="sourceCode python">test_data = numpy.zeros((<span class="dv">2</span>, <span class="dv">2</span>))
-<span class="dt">print</span>(center(test_data, <span class="dv">3</span>))</code></pre>
-<pre class="output"><code>[[ 3.  3.]
- [ 3.  3.]]</code></pre>
+<p>To understand what’s going on, and make our own functions easier to use, let’s re-define our ‘compare()’ function like this:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> compare(data, reference=<span class="fl">0.0</span>):
+    <span class="co">&#39;&#39;&#39; Compares one set of data to another and returns the difference. (0 by default).</span>
+<span class="co">    Example: compare(2, 1) =&gt; 1&#39;&#39;&#39;</span>
+    <span class="kw">return</span> data - reference</code></pre>
+<p>The key change is that the second parameter is now written reference=0.0 instead of just reference. If we call the function with two arguments, it works as it did before, but with just one parameter, the reference is automatically assigned the default value of 0:</p>
+<pre class="sourceCode python"><code class="sourceCode python">compare(<span class="dv">2</span>,<span class="dv">1</span>); compare(<span class="dv">2</span>)</code></pre>
+<pre class="output"><code>1
+2</code></pre>
 <p>But we can also now call it with just one parameter, in which case <code>desired</code> is automatically assigned the <a href="reference.html#default-value">default value</a> of 0.0:</p>
 <pre class="sourceCode python"><code class="sourceCode python">more_data = <span class="dv">5</span> + numpy.zeros((<span class="dv">2</span>, <span class="dv">2</span>))
 <span class="dt">print</span>(<span class="st">&#39;data before centering:&#39;</span>)
@@ -251,100 +243,18 @@ a: 55 b: 2 c: 3
 two parameters:
 a: 55 b: 66 c: 3</code></pre>
 <p>As this example shows, parameters are matched up from left to right, and any that haven’t been given a value explicitly get their default value. We can override this behavior by naming the value as we pass it in:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(<span class="st">&#39;only setting the value of c&#39;</span>)
-display(c=<span class="dv">77</span>)</code></pre>
-<pre class="output"><code>only setting the value of c
-a: 1 b: 2 c: 77</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">display(c=<span class="dv">77</span>)</code></pre>
+<pre class="output"><code>a: 1 b: 2 c: 77</code></pre>
 <p>With that in hand, let’s look at the help for <code>numpy.loadtxt</code>:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="dt">help</span>(numpy.loadtxt)</code></pre>
-<pre class="output"><code>Help on function loadtxt in module numpy.lib.npyio:
+<p><sub>~</sub> {.output}</p>
+<p><sub>~</sub>help(numpy.loadtxt) Help on function loadtxt in module numpy.lib.npyio:</p>
+<p>loadtxt(fname, dtype=<class 'float'>, comments=‘#’, delimiter=None, converters=None, skiprows=0, usecols=None, unpack=False, ndmin=0) Load data from a text file.</p>
+<pre><code>Each row in the text file must have the same number of values.
 
-loadtxt(fname, dtype=&lt;class &#39;float&#39;&gt;, comments=&#39;#&#39;, delimiter=None, converters=None, skiprows=0, usecols=None, unpack=False, ndmin=0)
-    Load data from a text file.
-
-    Each row in the text file must have the same number of values.
-
-    Parameters
-    ----------
-    fname : file or str
-        File, filename, or generator to read.  If the filename extension is
-        ``.gz`` or ``.bz2``, the file is first decompressed. Note that
-        generators should return byte strings for Python 3k.
-    dtype : data-type, optional
-        Data-type of the resulting array; default: float.  If this is a
-        record data-type, the resulting array will be 1-dimensional, and
-        each row will be interpreted as an element of the array.  In this
-        case, the number of columns used must match the number of fields in
-        the data-type.
-    comments : str, optional
-        The character used to indicate the start of a comment;
-        default: &#39;#&#39;.
-    delimiter : str, optional
-        The string used to separate values.  By default, this is any
-        whitespace.
-    converters : dict, optional
-        A dictionary mapping column number to a function that will convert
-        that column to a float.  E.g., if column 0 is a date string:
-        ``converters = {0: datestr2num}``.  Converters can also be used to
-        provide a default value for missing data (but see also `genfromtxt`):
-        ``converters = {3: lambda s: float(s.strip() or 0)}``.  Default: None.
-    skiprows : int, optional
-        Skip the first `skiprows` lines; default: 0.
-    usecols : sequence, optional
-        Which columns to read, with 0 being the first.  For example,
-        ``usecols = (1,4,5)`` will extract the 2nd, 5th and 6th columns.
-        The default, None, results in all columns being read.
-    unpack : bool, optional
-        If True, the returned array is transposed, so that arguments may be
-        unpacked using ``x, y, z = loadtxt(...)``.  When used with a record
-        data-type, arrays are returned for each field.  Default is False.
-    ndmin : int, optional
-        The returned array will have at least `ndmin` dimensions.
-        Otherwise mono-dimensional axes will be squeezed.
-        Legal values: 0 (default), 1 or 2.
-        .. versionadded:: 1.6.0
-
-    Returns
-    -------
-    out : ndarray
-        Data read from the text file.
-
-    See Also
-    --------
-    load, fromstring, fromregex
-    genfromtxt : Load data with missing values handled as specified.
-    scipy.io.loadmat : reads MATLAB data files
-
-    Notes
-    -----
-    This function aims to be a fast reader for simply formatted files.  The
-    `genfromtxt` function provides more sophisticated handling of, e.g.,
-    lines with missing values.
-
-    Examples
-    --------
-    &gt;&gt;&gt; from StringIO import StringIO   # StringIO behaves like a file object
-    &gt;&gt;&gt; c = StringIO(&quot;0 1\n2 3&quot;)
-    &gt;&gt;&gt; np.loadtxt(c)
-    array([[ 0.,  1.],
-           [ 2.,  3.]])
-
-    &gt;&gt;&gt; d = StringIO(&quot;M 21 72\nF 35 58&quot;)
-    &gt;&gt;&gt; np.loadtxt(d, dtype={&#39;names&#39;: (&#39;gender&#39;, &#39;age&#39;, &#39;weight&#39;),
-    ...                      &#39;formats&#39;: (&#39;S1&#39;, &#39;i4&#39;, &#39;f4&#39;)})
-    array([(&#39;M&#39;, 21, 72.0), (&#39;F&#39;, 35, 58.0)],
-          dtype=[(&#39;gender&#39;, &#39;|S1&#39;), (&#39;age&#39;, &#39;&lt;i4&#39;), (&#39;weight&#39;, &#39;&lt;f4&#39;)])
-
-    &gt;&gt;&gt; c = StringIO(&quot;1,0,2\n3,0,4&quot;)
-    &gt;&gt;&gt; x, y = np.loadtxt(c, delimiter=&#39;,&#39;, usecols=(0, 2), unpack=True)
-    &gt;&gt;&gt; x
-    array([ 1.,  3.])
-    &gt;&gt;&gt; y
-    array([ 2.,  4.])
-</code></pre>
-<p>There’s a lot of information here, but the most important part is the first couple of lines:</p>
-<pre class="sourceCode python"><code class="sourceCode python">loadtxt(fname, dtype=&lt;<span class="dt">type</span> <span class="st">&#39;float&#39;</span>&gt;, comments=<span class="st">&#39;#&#39;</span>, delimiter=<span class="ot">None</span>, converters=<span class="ot">None</span>, skiprows=<span class="dv">0</span>, usecols=<span class="ot">None</span>,
-        unpack=<span class="ot">False</span>, ndmin=<span class="dv">0</span>)</code></pre>
+Parameters
+----------</code></pre>
+<p>(…lots of info about parameters + examples removed for brevity…</p>
 <p>This tells us that <code>loadtxt</code> has one parameter called <code>fname</code> that doesn’t have a default value, and eight others that do. If we call the function like this:</p>
 <pre class="sourceCode python"><code class="sourceCode python">numpy.loadtxt(<span class="st">&#39;inflammation-01.csv&#39;</span>, <span class="st">&#39;,&#39;</span>)</code></pre>
 <p>then the filename is assigned to <code>fname</code> (which is what we want), but the delimiter string <code>','</code> is assigned to <code>dtype</code> rather than <code>delimiter</code>, because <code>dtype</code> is the second parameter in the list. However ‘,’ isn’t a known <code>dtype</code> so our code produced an error message when we tried to run it. When we call <code>loadtxt</code> we don’t have to provide <code>fname=</code> for the filename because it’s the first item in the list, but if we want the ‘,’ to be assigned to the variable <code>delimiter</code>, we <em>do</em> have to provide <code>delimiter=</code> for the second parameter since <code>delimiter</code> is not the second parameter in the list.</p>
@@ -353,9 +263,7 @@ loadtxt(fname, dtype=&lt;class &#39;float&#39;&gt;, comments=&#39;#&#39;, delimi
 <h2 id="combining-strings"><span class="glyphicon glyphicon-pencil"></span>Combining strings</h2>
 </div>
 <div class="panel-body">
-<p>“Adding” two strings produces their concatenation: <code>'a' + 'b'</code> is <code>'ab'</code>. Write a function called <code>fence</code> that takes two parameters called <code>original</code> and <code>wrapper</code> and returns a new string that has the wrapper character at the beginning and end of the original. A call to your function should look like this:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(fence(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;*&#39;</span>))</code></pre>
-<pre class="output"><code>*name*</code></pre>
+<p>“Adding” two strings produces their concatenation: <code>'a' + 'b'</code> is <code>'ab'</code>. Write a function called <code>fence</code> that takes two parameters called <code>original</code> and <code>wrapper</code> and returns a new string that has the wrapper character at the beginning and end of the original. A call to your function should look like this: <sub>~</sub> {.python} print(fence(‘name’, ’<em>’)) <sub>~</sub> <sub>~</sub> {.output} </em>name* <sub>~</sub></p>
 </div>
 </section>
 <section class="challenge panel panel-success">
