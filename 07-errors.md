@@ -16,298 +16,218 @@ minutes: 30
 >     * `IndexError`
 >     * `FileNotFoundError`
 
-Every programmer encounters errors,
-both those who are just beginning,
-and those who have been programming for years.
-Encountering errors and exceptions can be very frustrating at times,
-and can make coding feel like a hopeless endeavour.
-However,
-understanding what the different types of errors are
-and when you are likely to encounter them can help a lot.
-Once you know *why* you get certain types of errors,
-they become much easier to fix.
+Every programmer encounters errors, both those who are just beginning,
+and those who have been programming for years.  Encountering errors
+and exceptions can be very frustrating at times, and can make coding
+feel like a hopeless endeavour.  However, understanding what the
+different types of errors are and when you are likely to encounter
+them can help a lot.  Once you know *why* you get certain types of
+errors, they become much easier to fix.
 
-Errors in Python have a very specific form,
-called a [traceback](reference.html#traceback).
-Let's examine one:
+Errors in Python have a very specific form, called a
+[traceback](reference.html#traceback).  Let's examine one:
 
 ~~~ {.python}
-import errors_01
-errors_01.favorite_ice_cream()
+import stooges
+stooges.stooges()
+~~~
+~~~ {.output}
+larry
+curly
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-IndexError                                Traceback (most recent call last)
-<ipython-input-1-9d0462a5b07c> in <module>()
-      1 import errors_01
-----> 2 errors_01.favorite_ice_cream()
-
-/Users/jhamrick/project/swc/novice/python/errors_01.pyc in favorite_ice_cream()
-      5         "strawberry"
-      6     ]
-----> 7     print(ice_creams[3])
-
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "./stooges.py", line 5, in stooges
+    print(stooges[3])
 IndexError: list index out of range
 ~~~
 
-This particular traceback has two levels.
-You can determine the number of levels by looking for the number of arrows on the left hand side.
-In this case:
+This particular traceback has two levels:
 
-1.  The first shows code from the cell above,
-    with an arrow pointing to Line 2 (which is `favorite_ice_cream()`).
+The first (line 1) refers to the stooges.stooges() call (not very
+clear, I'm afraid), the second points to code in another function
+(stooges, located in the file stooges.py), with an arrow pointing to
+Line 5 (which is print(stooges[3])).
 
-2.  The second shows some code in another function (`favorite_ice_cream`, located in the file `errors_01.py`),
-    with an arrow pointing to Line 7 (which is `print(ice_creams[3])`).
+The last level is the actual place where the error occurred. The other
+level(s) show what function the program executed to get to the next
+level down. So, in this case, the program first performed a function
+call to the function stooges(). Inside this function, the program
+encountered an error on Line 5, when it tried to run the code
+print(stooges[3]).
 
-The last level is the actual place where the error occurred.
-The other level(s) show what function the program executed to get to the next level down.
-So, in this case, the program first performed a [function call](reference.html#function-call) to the function `favorite_ice_cream`.
-Inside this function,
-the program encountered an error on Line 7, when it tried to run the code `print(ice_creams[3])`.
+Sometimes, you might see a traceback that is very long – sometimes
+they might even be 20 levels deep! This can make it seem like
+something horrible happened, but really it just means that your
+program called many functions before it ran into the error. Most of
+the time, you can just pay attention to the bottom-most level, which
+is the actual place where the error occurred.
 
-> ## Long Tracebacks {.callout}
->
-> Sometimes, you might see a traceback that is very long -- sometimes they might even be 20 levels deep!
-> This can make it seem like something horrible happened,
-> but really it just means that your program called many functions before it ran into the error.
-> Most of the time,
-> you can just pay attention to the bottom-most level,
-> which is the actual place where the error occurred.
+So what error did the program actually encounter? In the last line of
+the traceback, Python helpfully tells us the category or type of error
+(in this case, it is an IndexError) and a more detailed error message
+(in this case, it says “list index out of range”).
 
-So what error did the program actually encounter?
-In the last line of the traceback,
-Python helpfully tells us the category or type of error (in this case, it is an `IndexError`)
-and a more detailed error message (in this case, it says "list index out of range").
+If you encounter an error and don’t know what it means, it is still
+important to read the traceback closely. That way, if you fix the
+error, but encounter a new one, you can tell that the error
+changed. Additionally, sometimes just knowing where the error occurred
+is enough to fix it, even if you don’t entirely understand the
+message.
 
-If you encounter an error and don't know what it means,
-it is still important to read the traceback closely.
-That way,
-if you fix the error,
-but encounter a new one,
-you can tell that the error changed.
-Additionally,
-sometimes just knowing *where* the error occurred is enough to fix it,
-even if you don't entirely understand the message.
-
-If you do encounter an error you don't recognize,
-try looking at the [official documentation on errors](http://docs.python.org/2/library/exceptions.html).
-However,
-note that you may not always be able to find the error there,
-as it is possible to create custom errors.
-In that case,
-hopefully the custom error message is informative enough to help you figure out what went wrong.
+If you do encounter an error you don’t recognize, try looking at the
+official documentation on errors. However, note that you may not
+always be able to find the error there, as it is possible to create
+custom errors. In that case, hopefully the custom error message is
+informative enough to help you figure out what went wrong.
 
 ## Syntax Errors
 
-When you forget a colon at the end of a line,
-accidentally add one space too many when indenting under an `if` statement,
-or forget a parentheses,
-you will encounter a [syntax error](reference.html#syntax-error).
-This means that Python couldn't figure out how to read your program.
-This is similar to forgetting punctuation in English:
+When you forget a colon at the end of a line, accidentally add one
+space too many when indenting under an `if` statement, or forget a
+parentheses, you will encounter a [syntax
+error](reference.html#syntax-error).  This means that Python couldn't
+figure out how to read your program.  This is similar to forgetting
+punctuation in English:
 
-> this text is difficult to read there is no punctuation there is also no capitalization
-> why is this hard because you have to figure out where each sentence ends
-> you also have to figure out where each sentence begins
-> to some extent it might be ambiguous if there should be a sentence break or not
-
-People can typically figure out what is meant by text with no punctuation,
-but people are much smarter than computers.
-If Python doesn't know how to read the program,
-it will just give up and inform you with an error.
-For example:
+People can typically figure out what is meant by text with no
+punctuation, but people are much smarter than computers.  If Python
+doesn't know how to read the program, it will just give up and inform
+you with an error.  For example:
 
 ~~~ {.python}
 def some_function()
-    msg = "hello, world!"
-    print(msg)
-     return msg
 ~~~
 ~~~ {.error}
-  File "<ipython-input-3-6bb841ea1423>", line 1
+  File "<stdin>", line 1
     def some_function()
-                       ^
+                      ^
 SyntaxError: invalid syntax
 ~~~
 
-Here, Python tells us that there is a `SyntaxError` on line 1,
-and even puts a little arrow in the place where there is an issue.
-In this case the problem is that the function definition is missing a colon at the end.
+Here, Python tells us that there is a `SyntaxError` on line 1, and
+even puts a little arrow in the place where there is an issue.  In
+this case the problem is that the function definition is missing a
+colon at the end.
 
-Actually, the function above has *two* issues with syntax.
-If we fix the problem with the colon,
-we see that there is *also* an `IndentationError`,
-which means that the lines in the function definition do not all have the same indentation:
+Another common class of Syntax errors has to do with indentation:
 
 ~~~ {.python}
 def some_function():
-    msg = "hello, world!"
+    msg="Hellow World!"
     print(msg)
-     return msg
+     return(msg)
+
 ~~~
 ~~~ {.error}
-  File "<ipython-input-4-ae290e7659cb>", line 4
-    return msg
+  File "<stdin>", line 4
+    return(msg)
     ^
 IndentationError: unexpected indent
 ~~~
 
-Both `SyntaxError` and `IndentationError` indicate a problem with the syntax of your program,
-but an `IndentationError` is more specific:
-it *always* means that there is a problem with how your code is indented.
-
-> ## Tabs and Spaces {.callout}
->
-> A quick note on indentation errors:
-> they can sometimes be insidious,
-> especially if you are mixing spaces and tabs.
-> Because they are both [whitespace](reference.html#whitespace),
-> it is difficult to visually tell the difference.
-> The IPython notebook actually gives us a bit of a hint,
-> but not all Python editors will do that.
-> In the following example,
-> the first two lines are using a tab for indentation,
-> while the third line uses four spaces:
->
-> ~~~ {.python}
-> def some_function():
->     msg = "hello, world!"
->     print(msg)
->     return msg
-> ~~~
-> ~~~ {.error}
->   File "<ipython-input-5-653b36fbcd41>", line 4
->     return msg
->               ^
-> IndentationError: unindent does not match any outer indentation level
-> ~~~
->
-> By default, one tab is equivalent to eight spaces,
-> so the only way to mix tabs and spaces is to make it look like this.
-> In general, is is better to just never use tabs and always use spaces,
-> because it can make things very confusing.
+Both `SyntaxError` and `IndentationError` indicate a problem with the
+syntax of your program, but an `IndentationError` is more specific: it
+*always* means that there is a problem with how your code is indented.
 
 ## Variable Name Errors
 
-Another very common type of error is called a `NameError`,
-and occurs when you try to use a variable that does not exist.
-For example:
+Another very common type of error is called a `NameError`, and occurs
+when you try to use a variable that does not exist.  For example:
 
 ~~~ {.python}
-print(a)
+print(newname)
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-<ipython-input-7-9d7b17ad5387> in <module>()
-----> 1 print(a)
-
-NameError: name 'a' is not defined
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'newname' is not defined
 ~~~
 
-Variable name errors come with some of the most informative error messages,
-which are usually of the form "name 'the_variable_name' is not defined".
+Variable name errors come with some of the most informative error
+messages, which are usually of the form "name 'variable_name' is
+not defined".
 
-Why does this error message occur?
-That's harder question to answer,
-because it depends on what your code is supposed to do.
-However,
-there are a few very common reasons why you might have an undefined variable.
-The first is that you meant to use a [string](reference.html#string), but forgot to put quotes around it:
+Why does this error message occur?  That's harder question to answer,
+because it depends on what your code is supposed to do.  However,
+there are a few very common reasons why you might have an undefined
+variable.  The first is that you meant to use a
+[string](reference.html#string), but forgot to put quotes around it:
 
 ~~~ {.python}
 print(hello)
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-<ipython-input-8-9553ee03b645> in <module>()
-----> 1 print(hello)
-
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 NameError: name 'hello' is not defined
 ~~~
 
-The second is that you just forgot to create the variable before using it.
-In the following example,
-`count` should have been defined (e.g., with `count = 0`) before the for loop:
+The second is that you just forgot to create the variable before using
+it.  In the following example, `c` should have been defined or
+initialized (e.g., with `c=0`) before the for loop:
 
 ~~~ {.python}
-for number in range(10):
-    count = count + number
-print("The count is: " + str(count))
+for n in range(10):
+    c=c+n
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-<ipython-input-9-dd6a12d7ca5c> in <module>()
-      1 for number in range(10):
-----> 2     count = count + number
-      3 print("The count is: " + str(count))
-
-NameError: name 'count' is not defined
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+NameError: name 'c' is not defined
 ~~~
 
-Finally, the third possibility is that you made a typo when you were writing your code.
-Let's say we fixed the error above by adding the line `Count = 0` before the for loop.
-Frustratingly, this actually does not fix the error.
-Remember that variables are [case-sensitive](reference.html#case-sensitive),
-so the variable `count` is different from `Count`. We still get the same error, because we still have not defined `count`:
+Finally, you could have made a typo when you were writing your
+code. Let’s say we fixed the error above by adding the line C=0 before
+the for loop. Frustratingly, this actually does not fix the
+error. Remember that variables are case-sensitive, so the variable c
+is different from C. We still get the same error, because we still
+have not defined c:
 
 ~~~ {.python}
-Count = 0
-for number in range(10):
-    count = count + number
-print("The count is: " + str(count))
+C=0
+for n in range(10):
+    c=c+n
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-<ipython-input-10-d77d40059aea> in <module>()
-      1 Count = 0
-      2 for number in range(10):
-----> 3     count = count + number
-      4 print("The count is: " + str(count))
-
-NameError: name 'count' is not defined
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+NameError: name 'c' is not defined
 ~~~
 
 ## Item Errors
 
-Next up are errors having to do with containers (like lists and dictionaries) and the items within them.
-If you try to access an item in a list or a dictionary that does not exist,
-then you will get an error.
-This makes sense:
-if you asked someone what day they would like to get coffee,
-and they answered "caturday",
-you might be a bit annoyed.
-Python gets similarly annoyed if you try to ask it for an item that doesn't exist:
+Next up are errors having to do with containers (like lists and
+dictionaries) and the items within them. If you try to access an item
+in a list or a dictionary that does not exist, then you will get an
+error:
 
 ~~~ {.python}
-letters = ['a', 'b', 'c']
-print("Letter #1 is " + letters[0])
-print("Letter #2 is " + letters[1])
-print("Letter #3 is " + letters[2])
-print("Letter #4 is " + letters[3])
+stooges = ['Moe', 'Larry', 'Curly']
+print("Stooge #1 is " + stooges[1])
 ~~~
 ~~~ {.output}
-Letter #1 is a
-Letter #2 is b
-Letter #3 is c
+Stooge #1 is Larry
+~~~
+~~~ {.python}
+print("Stooge #2 is " + stooges[2])
+~~~
+~~~ {.output}
+Stooge #2 is Curly
+~~~
+~~~ {.python}
+print("Stooge #3 is " + stooges[3])
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-IndexError                                Traceback (most recent call last)
-<ipython-input-11-d817f55b7d6c> in <module>()
-      3 print("Letter #2 is " + letters[1])
-      4 print("Letter #3 is " + letters[2])
-----> 5 print("Letter #4 is " + letters[3])
-
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 IndexError: list index out of range
 ~~~
 
-Here,
-Python is telling us that there is an `IndexError` in our code, meaning we tried to access a list index that did not exist.
+Remember, the Python Stooges are labelled 0-2 not 1-3. Python is
+telling us that there is an IndexError in our code, meaning we tried
+to access a list index that did not exist.
 
 ## File Errors
 
