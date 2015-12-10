@@ -435,8 +435,6 @@ With that in hand, let's look at the help for `numpy.loadtxt`:
 help(numpy.loadtxt)
 ~~~
 ~~~ {.output}
-
-~~~help(numpy.loadtxt)
 Help on function loadtxt in module numpy.lib.npyio:
 
 loadtxt(fname, dtype=<class 'float'>, comments='#', delimiter=None, converters=None, skiprows=0, usecols=None, unpack=False, ndmin=0)
@@ -447,12 +445,13 @@ loadtxt(fname, dtype=<class 'float'>, comments='#', delimiter=None, converters=N
     Parameters
     ----------
 (...lots of info about parameters + examples removed for brevity...
+~~~
 
 This tells us that `loadtxt` has one parameter called `fname` that
 doesn't have a default value, and eight others that do.  If we call
 the function like this:
 
-~~~python
+~~~ {.python}
 numpy.loadtxt('inflammation-01.csv', ',')
 ~~~
 

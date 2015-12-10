@@ -247,14 +247,16 @@ a: 55 b: 66 c: 3</code></pre>
 <pre class="output"><code>a: 1 b: 2 c: 77</code></pre>
 <p>With that in hand, let’s look at the help for <code>numpy.loadtxt</code>:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="dt">help</span>(numpy.loadtxt)</code></pre>
-<p><sub>~</sub> {.output}</p>
-<p><sub>~</sub>help(numpy.loadtxt) Help on function loadtxt in module numpy.lib.npyio:</p>
-<p>loadtxt(fname, dtype=<class 'float'>, comments=‘#’, delimiter=None, converters=None, skiprows=0, usecols=None, unpack=False, ndmin=0) Load data from a text file.</p>
-<pre><code>Each row in the text file must have the same number of values.
+<pre class="output"><code>Help on function loadtxt in module numpy.lib.npyio:
 
-Parameters
-----------</code></pre>
-<p>(…lots of info about parameters + examples removed for brevity…</p>
+loadtxt(fname, dtype=&lt;class &#39;float&#39;&gt;, comments=&#39;#&#39;, delimiter=None, converters=None, skiprows=0, usecols=None, unpack=False, ndmin=0)
+    Load data from a text file.
+
+    Each row in the text file must have the same number of values.
+
+    Parameters
+    ----------
+(...lots of info about parameters + examples removed for brevity...</code></pre>
 <p>This tells us that <code>loadtxt</code> has one parameter called <code>fname</code> that doesn’t have a default value, and eight others that do. If we call the function like this:</p>
 <pre class="sourceCode python"><code class="sourceCode python">numpy.loadtxt(<span class="st">&#39;inflammation-01.csv&#39;</span>, <span class="st">&#39;,&#39;</span>)</code></pre>
 <p>then the filename is assigned to <code>fname</code> (which is what we want), but the delimiter string <code>','</code> is assigned to <code>dtype</code> rather than <code>delimiter</code>, because <code>dtype</code> is the second parameter in the list. However ‘,’ isn’t a known <code>dtype</code> so our code produced an error message when we tried to run it. When we call <code>loadtxt</code> we don’t have to provide <code>fname=</code> for the filename because it’s the first item in the list, but if we want the ‘,’ to be assigned to the variable <code>delimiter</code>, we <em>do</em> have to provide <code>delimiter=</code> for the second parameter since <code>delimiter</code> is not the second parameter in the list.</p>
