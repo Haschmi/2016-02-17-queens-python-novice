@@ -49,103 +49,49 @@
 <li>Write and run tests for widely-used functions.</li>
 <li>Make sure we know what “correct” actually means.</li>
 </ul>
-<p>The good news is, doing these things will speed up our programming, not slow it down. As in real carpentry — the kind done with lumber — the time saved by measuring carefully before cutting a piece of wood is much greater than the time that measuring takes.</p>
+<p>The good news is, doing these things will speed up our programming, not slow it down. The time saved by measuring carefully before deploying the software wood is much greater than the time that testing takes.</p>
 <h2 id="assertions">Assertions</h2>
-<p>The first step toward getting the right answers from our programs is to assume that mistakes <em>will</em> happen and to guard against them. This is called <a href="reference.html#defensive-programming">defensive programming</a>, and the most common way to do it is to add <a href="reference.html#assertion">assertions</a> to our code so that it checks itself as it runs. An assertion is simply a statement that something must be true at a certain point in a program. When Python sees one, it evaluates the assertion’s condition. If it’s true, Python does nothing, but if it’s false, Python halts the program immediately and prints the error message if one is provided. For example, this piece of code halts as soon as the loop encounters a value that isn’t positive:</p>
-<pre class="sourceCode python"><code class="sourceCode python">numbers = [<span class="fl">1.5</span>, <span class="fl">2.3</span>, <span class="fl">0.7</span>, -<span class="fl">0.001</span>, <span class="fl">4.4</span>]
-total = <span class="fl">0.0</span>
-<span class="kw">for</span> n in numbers:
-    <span class="kw">assert</span> n &gt; <span class="fl">0.0</span>, <span class="st">&#39;Data should only contain positive values&#39;</span>
-    total += n
-<span class="dt">print</span>(<span class="st">&#39;total is:&#39;</span>, total)</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-&lt;ipython-input-19-33d87ea29ae4&gt; in &lt;module&gt;()
-      2 total = 0.0
-      3 for n in numbers:
-----&gt; 4     assert n &gt; 0.0, &#39;Data should only contain positive values&#39;
-      5     total += n
-      6 print(&#39;total is:&#39;, total)
-
-AssertionError: Data should only contain positive values</code></pre>
+<p>The first step toward getting the right answers from our programs is to assume that mistakes will happen and to guard against them. This is called defensive programming, and the most common way to do it is to add assertions to our code so that it checks itself as it runs. An assertion is simply a statement that something must be true at a certain point in a program. When Python sees one, it evaluates the assertion’s condition. If it’s true, Python does nothing, but if it’s false, Python halts the program immediately and prints the error message if one is provided.</p>
+<p>For example, in our “Mandelbrot” program, we will have to specify how many points (pixels) we are going to compute in the real and imaginary direction on the complex plane. These numbers obviously have to be positive integers:</p>
+<pre class="sourceCode python"><code class="sourceCode python">nr=<span class="dv">200</span>
+ni=-<span class="fl">200.0</span>
+<span class="kw">assert</span> nr&gt;<span class="dv">0</span> and ni&gt;<span class="dv">0</span>, <span class="st">&quot;One of the number of points is zero or negative.&quot;</span></code></pre>
+<pre class="error"><code>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+AssertionError: One of the number of points is zero or negative.
+assert type(nr)==type(1) and type(ni)==type(1), &quot;One of the numbers of points is not of integer type.&quot;
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+AssertionError: One of the numbers of points is not of integer type.</code></pre>
 <p>Programs like the Firefox browser are full of assertions: 10-20% of the code they contain are there to check that the other 80-90% are working correctly. Broadly speaking, assertions fall into three categories:</p>
 <ul>
 <li><p>A <a href="reference.html#precondition">precondition</a> is something that must be true at the start of a function in order for it to work correctly.</p></li>
 <li><p>A <a href="reference.html#postcondition">postcondition</a> is something that the function guarantees is true when it finishes.</p></li>
 <li><p>An <a href="reference.html#invariant">invariant</a> is something that is always true at a particular point inside a piece of code.</p></li>
 </ul>
-<p>For example, suppose we are representing rectangles using a <a href="reference.html#tuple">tuple</a> of four coordinates <code>(x0, y0, x1, y1)</code>, representing the lower left and upper right corners of the rectangle. In order to do some calculations, we need to normalize the rectangle so that the lower left corner is at the origin and the longest side is 1.0 units long. This function does that, but checks that its input is correctly formatted and that its result makes sense:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> normalize_rectangle(rect):
-    <span class="co">&#39;&#39;&#39;Normalizes a rectangle so that it is at the origin and 1.0 units long on its longest axis.&#39;&#39;&#39;</span>
-    <span class="kw">assert</span> <span class="dt">len</span>(rect) == <span class="dv">4</span>, <span class="st">&#39;Rectangles must contain 4 coordinates&#39;</span>
-    x0, y0, x1, y1 = rect
-    <span class="kw">assert</span> x0 &lt; x1, <span class="st">&#39;Invalid X coordinates&#39;</span>
-    <span class="kw">assert</span> y0 &lt; y1, <span class="st">&#39;Invalid Y coordinates&#39;</span>
-
-    dx = x1 - x0
-    dy = y1 - y0
-    <span class="kw">if</span> dx &gt; dy:
-        scaled = <span class="dt">float</span>(dx) / dy
-        upper_x, upper_y = <span class="fl">1.0</span>, scaled
-    <span class="kw">else</span>:
-        scaled = <span class="dt">float</span>(dx) / dy
-        upper_x, upper_y = scaled, <span class="fl">1.0</span>
-
-    <span class="kw">assert</span> <span class="dv">0</span> &lt; upper_x &lt;= <span class="fl">1.0</span>, <span class="st">&#39;Calculated upper X coordinate invalid&#39;</span>
-    <span class="kw">assert</span> <span class="dv">0</span> &lt; upper_y &lt;= <span class="fl">1.0</span>, <span class="st">&#39;Calculated upper Y coordinate invalid&#39;</span>
-
-    <span class="kw">return</span> (<span class="dv">0</span>, <span class="dv">0</span>, upper_x, upper_y)</code></pre>
-<p>The preconditions on lines 2, 4, and 5 catch invalid inputs:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(normalize_rectangle( (<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">2.0</span>) )) <span class="co"># missing the fourth coordinate</span></code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-&lt;ipython-input-21-3a97b1dcab70&gt; in &lt;module&gt;()
-----&gt; 1 print(normalize_rectangle( (0.0, 1.0, 2.0) )) # missing the fourth coordinate
-
-&lt;ipython-input-20-408dc39f3915&gt; in normalize_rectangle(rect)
-      1 def normalize_rectangle(rect):
-      2     &#39;&#39;&#39;Normalizes a rectangle so that it is at the origin and 1.0 units long on its longest axis.&#39;&#39;&#39;
-----&gt; 3     assert len(rect) == 4, &#39;Rectangles must contain 4 coordinates&#39;
-      4     x0, y0, x1, y1 = rect
-      5     assert x0 &lt; x1, &#39;Invalid X coordinates&#39;
-
-AssertionError: Rectangles must contain 4 coordinates</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(normalize_rectangle( (<span class="fl">4.0</span>, <span class="fl">2.0</span>, <span class="fl">1.0</span>, <span class="fl">5.0</span>) )) <span class="co"># X axis inverted</span></code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-&lt;ipython-input-22-f05ae7878a45&gt; in &lt;module&gt;()
-----&gt; 1 print(normalize_rectangle( (4.0, 2.0, 1.0, 5.0) )) # X axis inverted
-
-&lt;ipython-input-20-408dc39f3915&gt; in normalize_rectangle(rect)
-      3     assert len(rect) == 4, &#39;Rectangles must contain 4 coordinates&#39;
-      4     x0, y0, x1, y1 = rect
-----&gt; 5     assert x0 &lt; x1, &#39;Invalid X coordinates&#39;
-      6     assert y0 &lt; y1, &#39;Invalid Y coordinates&#39;
-      7
-
-AssertionError: Invalid X coordinates</code></pre>
-<p>The post-conditions help us catch bugs by telling us when our calculations cannot have been correct. For example, if we normalize a rectangle that is taller than it is wide everything seems OK:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(normalize_rectangle( (<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">5.0</span>) ))</code></pre>
-<pre class="output"><code>(0, 0, 0.2, 1.0)</code></pre>
-<p>but if we normalize one that’s wider than it is tall, the assertion is triggered:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(normalize_rectangle( (<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">5.0</span>, <span class="fl">1.0</span>) ))</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-&lt;ipython-input-24-5f0ef7954aeb&gt; in &lt;module&gt;()
-----&gt; 1 print(normalize_rectangle( (0.0, 0.0, 5.0, 1.0) ))
-
-&lt;ipython-input-20-408dc39f3915&gt; in normalize_rectangle(rect)
-     16
-     17     assert 0 &lt; upper_x &lt;= 1.0, &#39;Calculated upper X coordinate invalid&#39;
----&gt; 18     assert 0 &lt; upper_y &lt;= 1.0, &#39;Calculated upper Y coordinate invalid&#39;
-     19
-     20     return (0, 0, upper_x, upper_y)
-
-AssertionError: Calculated upper Y coordinate invalid</code></pre>
-<p>Re-reading our function, we realize that line 10 should divide <code>dy</code> by <code>dx</code> rather than <code>dx</code> by <code>dy</code>. (You can display line numbers by typing Ctrl-M, then L.) If we had left out the assertion at the end of the function, we would have created and returned something that had the right shape as a valid answer, but wasn’t. Detecting and debugging that would almost certainly have taken more time in the long run than writing the assertion.</p>
+<p>For example, for our Mandelbrot example, we want to keep the boundaries of the complex numbers flexible. We can do this by letting the user specify the smallest and largest real and imaginary part of the numbers, respectively. We then have to ensure that the minimum is always smaller than the maximum. This is a precondition.</p>
+<p>From the number of points and minimum and maximum real and imaginary parts we can compute values for the increase in either direction, i.e. the pixel size. These should be positive values, which is a post-condition for this code segment:</p>
+<pre class="sourceCode python"><code class="sourceCode python">nr=<span class="dv">200</span>
+ni=<span class="dv">200</span>
+rei=-<span class="fl">1.5</span>
+ref=<span class="fl">0.5</span>
+imi=-<span class="fl">1.0</span>
+imf=<span class="fl">1.0</span>
+<span class="kw">assert</span> rei &lt; ref, <span class="st">&#39;Initial real part must be smaller than final.&#39;</span>
+<span class="kw">assert</span> imi &lt; imf, <span class="st">&#39;Initial imaginary part must be smaller than final.&#39;</span>
+dr=(ref-rei)/nr
+di=(imi-imf)/ni
+<span class="kw">assert</span> dr&gt;<span class="dv">0</span> and di&gt;<span class="dv">0</span>, <span class="st">&#39;Negative pixelsize.&#39;</span></code></pre>
+<pre class="error"><code>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+AssertionError: Negative pixelsize.</code></pre>
+<p>The post-conditions help us catch bugs by telling us when our calculations cannot have been correct. In this case the input seems fine, so there must be something wrong in the code that causes the asserion of the post condition to fail. What?</p>
 <p>But assertions aren’t just about catching errors: they also help people understand programs. Each assertion gives the person reading the program a chance to check (consciously or otherwise) that their understanding matches what the code is doing.</p>
-<p>Most good programmers follow two rules when adding assertions to their code. The first is, <em>fail early, fail often</em>. The greater the distance between when and where an error occurs and when it’s noticed, the harder the error will be to debug, so good code catches mistakes as early as possible.</p>
-<p>The second rule is, <em>turn bugs into assertions or tests</em>. Whenever you fix a bug, write an assertion that catches the mistake should you make it again. If you made a mistake in a piece of code, the odds are good that you have made other mistakes nearby, or will make the same mistake (or a related one) the next time you change it. Writing assertions to check that you haven’t <a href="reference.html#regression">regressed</a> (i.e., haven’t re-introduced an old problem) can save a lot of time in the long run, and helps to warn people who are reading the code (including your future self) that this bit is tricky.</p>
+<p>Most good programmers follow two rules when adding assertions to their code:</p>
+<ul>
+<li><p>The first is, fail early, fail often. The greater the distance between when and where an error occurs and when it’s noticed, the harder the error will be to debug, so good code catches mistakes as early as possible.</p></li>
+<li><p>The second rule is, turn bugs into assertions or tests. Whenever you fix a bug, write an assertion that catches the mistake should you make it again. If you made a mistake in a piece of code, the odds are good that you have made other mistakes nearby, or will make the same mistake (or a related one) the next time you change it. Writing assertions to check that you haven’t regressed (i.e., haven’t re-introduced an old problem) can save a lot of time in the long run, and helps to warn people who are reading the code (including your future self) that this bit is tricky.</p></li>
+</ul>
 <h2 id="test-driven-development">Test-Driven Development</h2>
 <p>An assertion checks that something is true at a particular point in the program. The next step is to check the overall behavior of a piece of code, i.e., to make sure that it produces the right output when it’s given a particular input. For example, suppose we need to find where two or more time series overlap. The range of each time series is represented as a pair of numbers, which are the time the interval started and ended. The output is the largest range that they all include:</p>
 <p><img src="fig/python-overlapping-ranges.svg" alt="Overlapping Ranges" /><br /> Most novice programmers would solve this problem like this:</p>

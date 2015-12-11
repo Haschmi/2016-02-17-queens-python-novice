@@ -127,61 +127,17 @@ IndexError: list index out of range</code></pre>
 <h2 id="file-errors">File Errors</h2>
 <p>The last type of error we’ll cover today are those associated with reading and writing files: <code>FileNotFoundError</code>. If you try to read a file that does not exist, you will recieve an <code>FileNotFoundError</code> telling you so.</p>
 <pre class="sourceCode python"><code class="sourceCode python">file_handle = <span class="dt">open</span>(<span class="st">&#39;myfile.txt&#39;</span>, <span class="st">&#39;r&#39;</span>)</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-FileNotFoundError                         Traceback (most recent call last)
-&lt;ipython-input-14-f6e1ac4aee96&gt; in &lt;module&gt;()
-----&gt; 1 file_handle = open(&#39;myfile.txt&#39;, &#39;r&#39;)
-
+<pre class="error"><code>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
 FileNotFoundError: [Errno 2] No such file or directory: &#39;myfile.txt&#39;</code></pre>
-<p>One reason for receiving this error is that you specified an incorrect path to the file. For example, if I am currently in a folder called <code>myproject</code>, and I have a file in <code>myproject/writing/myfile.txt</code>, but I try to just open <code>myfile.txt</code>, this will fail. The correct path would be <code>writing/myfile. xt</code>. It is also possible (like with <code>NameError</code>) that you just made a typo.</p>
+<p>One reason for receiving this error is that you specified an incorrect path to the file. For example, if I am currently in a folder called <code>myproject</code>, and I have a file in <code>myproject/writing/myfile.txt</code>, but I try to just open <code>myfile.txt</code>, this will fail. The correct path would be <code>writing/myfile.  xt</code>. It is also possible (like with <code>NameError</code>) that you just made a typo.</p>
 <p>Another issue could be that you used the “read” flag instead of the “write” flag. Python will not give you an error if you try to open a file for writing when the file does not exist. However, if you meant to open a file for reading, but accidentally opened it for writing, and then try to read from it, you will get an <code>UnsupportedOperation</code> error telling you that the file was not opened for reading:</p>
 <pre class="sourceCode python"><code class="sourceCode python">file_handle = <span class="dt">open</span>(<span class="st">&#39;myfile.txt&#39;</span>, <span class="st">&#39;w&#39;</span>)
 file_handle.read()</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-UnsupportedOperation                      Traceback (most recent call last)
-&lt;ipython-input-15-b846479bc61f&gt; in &lt;module&gt;()
-      1 file_handle = open(&#39;myfile.txt&#39;, &#39;w&#39;)
-----&gt; 2 file_handle.read()
-
-UnsupportedOperation: not readable</code></pre>
+<pre class="error"><code>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+io.UnsupportedOperation: not readable</code></pre>
 <p>These are the most common errors with files, though many others exist. If you get an error that you’ve never seen before, searching the Internet for that error type often reveals common reasons why you might get that error.</p>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="reading-error-messages"><span class="glyphicon glyphicon-pencil"></span>Reading Error Messages</h2>
-</div>
-<div class="panel-body">
-<p>Read the traceback below, and identify the following pieces of information about it:</p>
-<ol style="list-style-type: decimal">
-<li>How many levels does the traceback have?</li>
-<li>What is the file name where the error occurred?</li>
-<li>What is the function name where the error occurred?</li>
-<li>On which line number in this function did the error occurr?</li>
-<li>What is the type of error?</li>
-<li>What is the error message?</li>
-</ol>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">import</span> errors_02
-errors_02.print_friday_message()</code></pre>
-<pre class="error"><code>---------------------------------------------------------------------------
-KeyError                                  Traceback (most recent call last)
-&lt;ipython-input-2-e4c4cbafeeb5&gt; in &lt;module&gt;()
-      1 import errors_02
-----&gt; 2 errors_02.print_friday_message()
-
-/Users/jhamrick/project/swc/novice/python/errors_02.py in print_friday_message()
-     13
-     14 def print_friday_message():
----&gt; 15     print_message(&quot;Friday&quot;)
-
-/Users/jhamrick/project/swc/novice/python/errors_02.py in print_message(day)
-      9         &quot;sunday&quot;: &quot;Aw, the weekend is almost over.&quot;
-     10     }
----&gt; 11     print(messages[day])
-     12
-     13
-
-KeyError: &#39;Friday&#39;</code></pre>
-</div>
-</section>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h2 id="identifying-syntax-errors"><span class="glyphicon glyphicon-pencil"></span>Identifying Syntax Errors</h2>

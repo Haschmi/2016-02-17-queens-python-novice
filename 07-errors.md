@@ -231,96 +231,48 @@ to access a list index that did not exist.
 
 ## File Errors
 
-The last type of error we'll cover today are those associated with reading and writing files: `FileNotFoundError`.
-If you try to read a file that does not exist,
-you will recieve an `FileNotFoundError` telling you so.
+The last type of error we'll cover today are those associated with
+reading and writing files: `FileNotFoundError`.  If you try to read a
+file that does not exist, you will recieve an `FileNotFoundError`
+telling you so.
 
 ~~~ {.python}
 file_handle = open('myfile.txt', 'r')
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-FileNotFoundError                         Traceback (most recent call last)
-<ipython-input-14-f6e1ac4aee96> in <module>()
-----> 1 file_handle = open('myfile.txt', 'r')
-
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 FileNotFoundError: [Errno 2] No such file or directory: 'myfile.txt'
 ~~~
 
-One reason for receiving this error is that you specified an incorrect path to the file.
-For example,
-if I am currently in a folder called `myproject`,
-and I have a file in `myproject/writing/myfile.txt`,
-but I try to just open `myfile.txt`,
-this will fail.
-The correct path would be `writing/myfile.
-xt`. It is also possible (like with `NameError`) that you just made a typo.
+One reason for receiving this error is that you specified an incorrect
+path to the file.  For example, if I am currently in a folder called
+`myproject`, and I have a file in `myproject/writing/myfile.txt`, but
+I try to just open `myfile.txt`, this will fail.  The correct path
+would be `writing/myfile.  xt`. It is also possible (like with
+`NameError`) that you just made a typo.
 
-Another issue could be that you used the "read" flag instead of the "write" flag.
-Python will not give you an error if you try to open a file for writing when the file does not exist.
-However,
-if you meant to open a file for reading,
-but accidentally opened it for writing,
-and then try to read from it,
-you will get an `UnsupportedOperation` error
-telling you that the file was not opened for reading:
+Another issue could be that you used the "read" flag instead of the
+"write" flag.  Python will not give you an error if you try to open a
+file for writing when the file does not exist.  However, if you meant
+to open a file for reading, but accidentally opened it for writing,
+and then try to read from it, you will get an `UnsupportedOperation`
+error telling you that the file was not opened for reading:
 
 ~~~ {.python}
 file_handle = open('myfile.txt', 'w')
 file_handle.read()
 ~~~
 ~~~ {.error}
----------------------------------------------------------------------------
-UnsupportedOperation                      Traceback (most recent call last)
-<ipython-input-15-b846479bc61f> in <module>()
-      1 file_handle = open('myfile.txt', 'w')
-----> 2 file_handle.read()
-
-UnsupportedOperation: not readable
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+io.UnsupportedOperation: not readable
 ~~~
 
-These are the most common errors with files,
-though many others exist.
-If you get an error that you've never seen before,
-searching the Internet for that error type
-often reveals common reasons why you might get that error.
-
-> ## Reading Error Messages {.challenge}
->
-> Read the traceback below, and identify the following pieces of information about it:
->
-> 1.  How many levels does the traceback have?
-> 2.  What is the file name where the error occurred?
-> 3.  What is the function name where the error occurred?
-> 4.  On which line number in this function did the error occurr?
-> 5.  What is the type of error?
-> 6.  What is the error message?
->
-> ~~~ {.python}
-> import errors_02
-> errors_02.print_friday_message()
-> ~~~
-> ~~~ {.error}
-> ---------------------------------------------------------------------------
-> KeyError                                  Traceback (most recent call last)
-> <ipython-input-2-e4c4cbafeeb5> in <module>()
->       1 import errors_02
-> ----> 2 errors_02.print_friday_message()
->
-> /Users/jhamrick/project/swc/novice/python/errors_02.py in print_friday_message()
->      13
->      14 def print_friday_message():
-> ---> 15     print_message("Friday")
->
-> /Users/jhamrick/project/swc/novice/python/errors_02.py in print_message(day)
->       9         "sunday": "Aw, the weekend is almost over."
->      10     }
-> ---> 11     print(messages[day])
->      12
->      13
->
-> KeyError: 'Friday'
-> ~~~
+These are the most common errors with files, though many others exist.
+If you get an error that you've never seen before, searching the
+Internet for that error type often reveals common reasons why you
+might get that error.
 
 > ## Identifying Syntax Errors {.challenge}
 >
