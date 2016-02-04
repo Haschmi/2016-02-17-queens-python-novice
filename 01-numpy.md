@@ -481,10 +481,10 @@ image  = matplotlib.pyplot.imshow(data)
 matplotlib.pyplot.show(image)
 ~~~
 
-![Heatmap of the Data](fig/01-numpy_71_0.png)
+![Really rough picture of Mandelbrot Set](fig/rough.png)
 
 Blue regions in this heat map are low values, while red shows high
-values. Of course, 21x21 isn't exactly great resolution, and it appear
+values. Of course, 20x20 isn't exactly great resolution, and it appear
 that the values are either very large (namely, 1000), or quite small
 (<20), with very little in between. It is one of the features of the
 Mandelbrot set that the "interesting stuff" is happening at the border
