@@ -107,5 +107,4 @@ To do that, we'll have to learn a little bit about programming.
 ## Other Resources
 
 *   [Reference](reference.html)
-*   [Discussion](discussion.html)
-*   [Instructor's Guide](instructors.html)
+
