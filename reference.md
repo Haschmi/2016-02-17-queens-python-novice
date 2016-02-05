@@ -3,7 +3,7 @@ layout: page
 title: Programming with Python
 subtitle: Reference
 ---
-## [Analyzing Patient Data](01-numpy.html)
+## [Data Files and Data Visualization](01-numpy.html)
 
 *   Import a library into a program using `import libraryname`.
 *   Use the `numpy` library to work with arrays in Python.
