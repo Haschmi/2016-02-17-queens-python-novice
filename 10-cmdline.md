@@ -10,11 +10,11 @@ minutes: 30
 > *   Handle flags and files separately in a command-line program.
 > *   Read data from standard input in a program so that it can be used in a pipeline.
 
-The IPython Notebook and other interactive tools are great for prototyping code and exploring data,
+The IPython interpreter and other interactive tools are great for prototyping code and exploring data,
 but sooner or later we will want to use our program in a pipeline
-or run it in a shell script to process thousands of data files. In order to do that,
+or run it in a shell script to process a lot of data. In order to do that,
 we need to make our programs work like other Unix command-line tools. For example,
-we may want a program that reads a dataset and prints the average inflammation per patient.
+we may want a program that reads a dataset and plots the data as a pretty picture.
 
 > ## Switching to Shell Commands {.callout}
 > In this lesson we are switching from typing commands in a Python interpreter to typing

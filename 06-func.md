@@ -1,4 +1,4 @@
----
+﻿---
 layout: page
 title: Programming with Python
 subtitle: Creating Functions
@@ -452,7 +452,7 @@ doesn't have a default value, and eight others that do.  If we call
 the function like this:
 
 ~~~ {.python}
-numpy.loadtxt('inflammation-01.csv', ',')
+numpy.loadtxt('mandel-small.csv', ',')
 ~~~
 
 then the filename is assigned to `fname` (which is what we want), but

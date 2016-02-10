@@ -108,7 +108,7 @@
 <p>Now that our data is in memory, we can start doing things with it. First, let’s ask what <a href="reference.html#type">type</a> of thing <code>data</code> refers to:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(<span class="bu">type</span>(data))</code></pre></div>
 <pre class="output"><code>&lt;class &#39;numpy.ndarray&#39;&gt;</code></pre>
-<p>The output tells us that <code>data</code> currently refers to an N-dimensional array created by the NumPy library. These data corresponds to arthritis patient’s inflammation. The rows are the individual patients and the columns are there daily inflammation measurements. We can see what its <a href="reference.html#shape">shape</a> is like this:</p>
+<p>The output tells us that <code>data</code> currently refers to an N-dimensional array created by the NumPy library. These data corresponds to iteration numbers from the Mandelbrot Set. The rows are varying real parts with a fixed imaginary part and the columns are varying imaginary parts with a fixed real part. We can see what its <a href="reference.html#shape">shape</a> is like this:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(data.shape)</code></pre></div>
 <pre class="output"><code>(20, 20)</code></pre>
 <p>This tells us that <code>data</code> has 60 rows and 40 columns. When we created the variable <code>data</code> to store our arthritis data, we didn’t just create the array, we also created information about the array, called <a href="reference.html#member">members</a> or attributes. This extra information describes <code>data</code> in the same way an adjective describes a noun. <code>data.shape</code> is an attribute of <code>data</code> which described the dimensions of <code>data</code>. We use the same dotted notation for the attributes of variables that we use for the functions in libraries because they have the same part-and-whole relationship.</p>
@@ -186,8 +186,8 @@ std dev: 484.87493024</code></pre>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(<span class="st">&#39;Maximum value in bottom row&#39;</span>, data[<span class="op">-</span><span class="dv">1</span>,:].<span class="bu">max</span>())</code></pre></div>
 <pre class="output"><code>Maximum value in bottom row 24.0</code></pre>
 <p>Note the weird “-1” index ? The convention is that negative indices count from the bottom starting with -1 (remember, 0 is taken for the top). It appears that 1000.0 is a frequently occurring value. That’s because we used that as a cut-off when we calculated the data, but we get to that later.</p>
-<p>What if we need the maximum inflammation for <em>all</em> patients (as in the next diagram on the left), or the average for each day (as in the diagram on the right)? As the diagram below shows, we want to perform the operation across an axis:</p>
-<p>To support this, most array methods allow us to specify the axis we want to work on. If we ask for the average across axis 0 (rows in our 2D example), we get:</p>
+<p>What if we need the maximum for all real or all imaginary parts ?</p>
+<p>To support this, most array methods allow us to specify the axis we want to work on. If we ask for the average across axis 0 (columns in our 2D example), we get:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(data.mean(axis<span class="op">=</span><span class="dv">0</span>))</code></pre></div>
 <pre class="output"><code>[  53.7    54.45   55.35  155.95  253.85  256.25  254.05  155.55  256.35
   454.1   651.9   554.7   652.65  851.25  852.85  703.9   652.2   552.9
@@ -195,12 +195,12 @@ std dev: 484.87493024</code></pre>
 <p>As a quick check, we can ask this array what its shape is:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(data.mean(axis<span class="op">=</span><span class="dv">0</span>).shape)</code></pre></div>
 <pre class="output"><code>(20,)</code></pre>
-<p>The expression <code>(20,)</code> tells us we have an N×1 vector, so this is the average inflammation per day for all patients. If we average across axis 1 (columns in our 2D example), we get:</p>
+<p>The expression <code>(20,)</code> tells us we have an N X 1 vector, so this is the average value for a given real part. If we average across axis 1 (columns in our 2D example), we get:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(data.mean(axis<span class="op">=</span><span class="dv">1</span>))</code></pre></div>
 <pre class="output"><code>[  53.65    5.25  104.55  105.2   305.8   453.15  503.55  506.95  704.15
   802.05  900.95  802.05  704.15  506.95  503.55  453.15  305.8   105.2
   104.55    5.25]</code></pre>
-<p>which is the average value across columns.</p>
+<p>which is the average value across rows, i.e. for a fixed value of the imaginary part.</p>
 <p>The mathematician Richard Hamming once said, “The purpose of computing is insight, not numbers,” and the best way to develop insight is often to visualize data. Visualization deserves an entire lecture (or course) of its own, but we can explore a few features of Python’s <code>matplotlib</code> library here. While there is no “official” plotting library, this package is the de facto standard. First, we will import the <code>pyplot</code> module from <code>matplotlib</code> and use two of its functions to create and display a heat map of our data:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> matplotlib.pyplot
 image  <span class="op">=</span> matplotlib.pyplot.imshow(data)
@@ -262,38 +262,6 @@ last three characters: gen</code></pre>
 </div>
 <div class="panel-body">
 <p>The expression <code>element[3:3]</code> produces an <a href="reference.html#empty-string">empty string</a>, i.e., a string that contains no characters. If <code>data</code> holds our array of patient data, what does <code>data[3:3, 4:4]</code> produce? What about <code>data[3:3, :]</code>?</p>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="check-your-understanding-plot-scaling"><span class="glyphicon glyphicon-pencil"></span>Check your understanding: plot scaling</h2>
-</div>
-<div class="panel-body">
-<p>Why do all of our plots stop just short of the upper end of our graph?</p>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="check-your-understanding-drawing-straight-lines"><span class="glyphicon glyphicon-pencil"></span>Check your understanding: drawing straight lines</h2>
-</div>
-<div class="panel-body">
-<p>Why are the vertical lines in our plot of the minimum inflammation per day not perfectly vertical?</p>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="make-your-own-plot"><span class="glyphicon glyphicon-pencil"></span>Make your own plot</h2>
-</div>
-<div class="panel-body">
-<p>Create a plot showing the standard deviation (<code>numpy.std</code>) of the inflammation data for each day across all patients.</p>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h2 id="moving-plots-around"><span class="glyphicon glyphicon-pencil"></span>Moving plots around</h2>
-</div>
-<div class="panel-body">
-<p>Modify the program to display the three plots on top of one another instead of side by side.</p>
 </div>
 </section>
         </div>

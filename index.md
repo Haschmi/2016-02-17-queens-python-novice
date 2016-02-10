@@ -88,7 +88,7 @@ To do that, we'll have to learn a little bit about programming.
 > 3. You can access this folder from the Unix shell with:
 >
 > ~~~ {.input}
-> $ cd && cd python-novice-mandelbrot/data
+> $ cd && cd python
 > ~~~
 
 ## Topics

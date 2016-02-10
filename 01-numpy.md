@@ -192,9 +192,9 @@ print(type(data))
 ~~~
 
 The output tells us that `data` currently refers to an N-dimensional
-array created by the NumPy library. These data corresponds to
-arthritis patient's inflammation. The rows are the individual patients
-and the columns are there daily inflammation measurements.  We can see
+array created by the NumPy library. These data corresponds to 
+iteration numbers from the Mandelbrot Set. The rows are varying real parts with a fixed imaginary part
+and the columns are varying imaginary parts with a fixed real part.  We can see
 what its [shape](reference.html#shape) is like this:
 
 ~~~ {.python}
@@ -424,13 +424,10 @@ top). It appears that 1000.0 is a frequently occurring value. That's
 because we used that as a cut-off when we calculated the data, but we
 get to that later.
 
-What if we need the maximum inflammation for *all* patients (as in the
-next diagram on the left), or the average for each day (as in the
-diagram on the right)? As the diagram below shows, we want to perform the
-operation across an axis:
+What if we need the maximum for all real or all imaginary parts ? 
 
 To support this, most array methods allow us to specify the axis we
-want to work on.  If we ask for the average across axis 0 (rows in our
+want to work on.  If we ask for the average across axis 0 (columns in our
 2D example), we get:
 
 ~~~ {.python}
@@ -451,8 +448,8 @@ print(data.mean(axis=0).shape)
 (20,)
 ~~~
 
-The expression `(20,)` tells us we have an N&times;1 vector,
-so this is the average inflammation per day for all patients.
+The expression `(20,)` tells us we have an N X 1 vector,
+so this is the average value for a given real part.
 If we average across axis 1 (columns in our 2D example), we get:
 
 ~~~ {.python}
@@ -464,7 +461,7 @@ print(data.mean(axis=1))
   104.55    5.25]
 ~~~
 
-which is the average value across columns.
+which is the average value across rows, i.e. for a fixed value of the imaginary part.
 
 The mathematician Richard Hamming once said, "The purpose of computing
 is insight, not numbers," and the best way to develop insight is often
@@ -555,18 +552,3 @@ explore.
 > what does `data[3:3, 4:4]` produce?
 > What about `data[3:3, :]`?
 
-> ## Check your understanding: plot scaling {.challenge}
->
-> Why do all of our plots stop just short of the upper end of our graph?
-
-> ## Check your understanding: drawing straight lines {.challenge}
->
-> Why are the vertical lines in our plot of the minimum inflammation per day not perfectly vertical?
-
-> ## Make your own plot {.challenge}
->
-> Create a plot showing the standard deviation (`numpy.std`) of the inflammation data for each day across all patients.
-
-> ## Moving plots around {.challenge}
->
-> Modify the program to display the three plots on top of one another instead of side by side.

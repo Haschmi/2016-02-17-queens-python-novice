@@ -40,27 +40,27 @@
 </div>
 </section>
 <p>We can use our skills with loops to process multiple files in a directory, for instance by visualizing them. The only thing that’s missing for that is a library with a rather unfortunate name:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">import</span> glob</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> glob</code></pre></div>
 <p>The <code>glob</code> library contains a single function, also called <code>glob</code>, that finds files whose names match a pattern. We provide those patterns as strings: the character <code>*</code> matches zero or more characters, while <code>?</code> matches any one character. We can use this to get the names of all the csv files that start with “mandel-big-” in the current directory:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span>(glob.glob(<span class="st">&#39;mandel-big-?.html&#39;</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(glob.glob(<span class="st">&#39;mandel-big-?.html&#39;</span>))</code></pre></div>
 <pre class="output"><code>[&#39;mandel-big-2.csv&#39;, &#39;mandel-big-5.csv&#39;, &#39;mandel-big-4.csv&#39;, &#39;mandel-big-3.csv&#39;, &#39;mandel-big-0.csv&#39;, &#39;mandel-big-1.csv&#39;]</code></pre>
 <p>As these examples show, <code>glob.glob</code>’s result is a list of strings, which means we can loop over it to do something with each filename in turn. In our case, the “something” we want to do generate a plot for each of our Mandelbrot datasets. Let’s test it by analyzing the first three files in the list:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">import</span> numpy <span class="ch">as</span> np
-<span class="ch">import</span> matplotlib.pyplot <span class="ch">as</span> plt
-<span class="ch">import</span> glob
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> numpy <span class="im">as</span> np
+<span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt
+<span class="im">import</span> glob
 
-filenames = glob.glob(<span class="st">&#39;mandel-big-?.csv&#39;</span>)
-<span class="kw">for</span> f in filenames:
-    <span class="dt">print</span>(f)
-    data = np.loadtxt(fname=f, delimiter=<span class="st">&#39;,&#39;</span>)
-    image=plt.imshow(data)
-    plt.show(image)</code></pre>
-<pre class="output"><code>mandel-big-2.csv
-mandel-big-5.csv
-mandel-big-4.csv
-mandel-big-3.csv
-mandel-big-0.csv
-mandel-big-1.csv</code></pre>
+filenames <span class="op">=</span> glob.glob(<span class="st">&#39;mandel-big-?.csv&#39;</span>)
+<span class="cf">for</span> f <span class="op">in</span> filenames:
+    <span class="bu">print</span>(f)
+    data <span class="op">=</span> np.loadtxt(fname<span class="op">=</span>f, delimiter<span class="op">=</span><span class="st">&#39;,&#39;</span>)
+    image<span class="op">=</span>plt.imshow(data)
+    plt.show(image)</code></pre></div>
+<pre class="output"><code>mandel-big-2.csv [...shows picture...]
+mandel-big-5.csv [...shows picture...]
+mandel-big-4.csv [...shows picture...]
+mandel-big-3.csv [...shows picture...]
+mandel-big-0.csv [...shows picture...]
+mandel-big-1.csv [...shows picture...]</code></pre>
 <p>Sure enough, this is a nice way to create a “slide-show” of the data files. The only thing that is not quite right here is the order in which the files get put into the “filenames” list. But there is a fix for that: when you read it in, use the function sorted() to do the job:</p>
 <pre class="(.python)"><code>filenames = sorted(glob.glob(&#39;mandel-big-?.csv&#39;)
 print(filenames)</code></pre>

@@ -51,12 +51,12 @@ for f in filenames:
 ~~~
 
 ~~~ {.output}
-mandel-big-2.csv
-mandel-big-5.csv
-mandel-big-4.csv
-mandel-big-3.csv
-mandel-big-0.csv
-mandel-big-1.csv
+mandel-big-2.csv [...shows picture...]
+mandel-big-5.csv [...shows picture...]
+mandel-big-4.csv [...shows picture...]
+mandel-big-3.csv [...shows picture...]
+mandel-big-0.csv [...shows picture...]
+mandel-big-1.csv [...shows picture...]
 ~~~
 
 Sure enough, this is a nice way to create a "slide-show" of the data files. The only thing that is not quite right here is the order in which the files get put into the "filenames" list. But there is a fix for that: when you read it in, use the function sorted() to do the job:
