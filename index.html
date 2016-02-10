@@ -28,7 +28,13 @@
         <div class="col-md-10 col-md-offset-1">
                     <h1 class="title">Programming with Python</h1>
           <p>The best way to learn how to program is to do something either fun or useful, so this introduction to Python is built a hopefully fun example: The computation and visualization of the so-called Mandelbrot Set.</p>
-<p>The [Mandelbrot set] (https://en.wikipedia.org/wiki/Mandelbrot_set) is a set of complex numbers for which a certain iterative sequence does not diverge. Since complex numbers have a real and an imaginary part, they can be visualized on a plane, the so-called complex plane. It happens that the Mandelbrot set has a very rich and “complex” structure which we are going to explore.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a> is a set of complex numbers for which a certain iterative sequence does not diverge. Since complex numbers have a real and an imaginary part, they can be visualized on a plane, the so-called complex plane. It happens that the Mandelbrot set has a very rich and “complex” structure which we are going to explore.</p>
+<figure>
+<img src="fig/Mandelbrot.jpg" width="600">
+<figcaption>
+The Mandelbrot Fractal Set
+</figcaption>
+</figure>
 <p>If you are curious, the sequence mentioned is “add-and-square”: Starting with 0, you add a given complex number, square the result, add the same number, square again, etc.</p>
 <p>Our real goal isn’t to teach you about the Mandelbrot set of course. It’s not even to teach you Python, but to teach you the basic concepts that all programming depends on. We use Python in our lessons because:</p>
 <ol style="list-style-type: decimal">
@@ -80,12 +86,15 @@
 </div>
 <div class="panel-body">
 <p>All the required data can be found in your home directory on your account</p>
-<ol style="list-style-type: decimal">
-<li>There is a folder (directory) python-novice-mandelbrot in your home directory.</li>
-<li>It contains another folder called “data”.</li>
-<li>You can access this folder from the Unix shell with:</li>
-</ol>
+<p>There is a folder (directory) python in your home directory. You can access this folder from the Unix shell with:</p>
 <pre class="input"><code>$ cd &amp;&amp; cd python</code></pre>
+<p>Once you’re there you can start by typing</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">python3</span></code></pre></div>
+<pre class="output"><code>Python 3.4.4 |Anaconda 2.3.0 (64-bit)| (default, Jan 11 2016, 13:54:01)
+[GCC 4.4.7 20120313 (Red Hat 4.4.7-1)] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;</code></pre>
+<p>and off you go.</p>
 </div>
 </section>
 <h2 id="topics">Topics</h2>

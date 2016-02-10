@@ -8,12 +8,14 @@ useful, so this introduction to Python is built a hopefully fun
 example: The computation and visualization of the so-called Mandelbrot
 Set.
 
-The [Mandelbrot set] (https://en.wikipedia.org/wiki/Mandelbrot_set) is
+The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a> is
 a set of complex numbers for which a certain iterative sequence does
 not diverge. Since complex numbers have a real and an imaginary part,
 they can be visualized on a plane, the so-called complex plane. It
 happens that the Mandelbrot set has a very rich and "complex"
 structure which we are going to explore.
+
+<figure><img src="fig/Mandelbrot.jpg" width="600"><figcaption>The Mandelbrot Fractal Set</figcaption></figure>
 
 If you are curious, the sequence mentioned is "add-and-square":
 Starting with 0, you add a given complex number, square the result,
@@ -83,13 +85,29 @@ To do that, we'll have to learn a little bit about programming.
 >
 > All the required data can be found in your home directory on your account
 >
-> 1. There is a folder (directory) python-novice-mandelbrot in your home directory.
-> 2. It contains another folder called "data". 
-> 3. You can access this folder from the Unix shell with:
+> There is a folder (directory) python in your home directory.
+> You can access this folder from the Unix shell with:
 >
 > ~~~ {.input}
 > $ cd && cd python
 > ~~~
+>
+> Once you're there you can start by typing
+>
+> ~~~ {.bash}
+> $ python3
+> ~~~
+>
+> ~~~ {.output}
+> Python 3.4.4 |Anaconda 2.3.0 (64-bit)| (default, Jan 11 2016, 13:54:01)
+> [GCC 4.4.7 20120313 (Red Hat 4.4.7-1)] on linux
+> Type "help", "copyright", "credits" or "license" for more information.
+> >>>
+> ~~~
+>
+> and off you go.
+
+
 
 ## Topics
 
